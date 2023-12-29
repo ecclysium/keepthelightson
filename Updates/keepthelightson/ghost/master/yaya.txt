@@ -1,0 +1,40 @@
+//******************************************************************************
+// SimpleYAYA Ghost Template
+// yaya.txt (configuration file)
+// originally written by umeici.
+// changed by yaya development team.
+//******************************************************************************
+
+//------------------------------------------------------------------------------
+// system dictionary
+//------------------------------------------------------------------------------
+dic, yaya_shiori3.dic // YAYA: configuration dictionary. Always specify first.
+
+//------------------------------------------------------------------------------
+// A list of included files for the body
+//------------------------------------------------------------------------------
+
+dic, jd_main.dic 		// main dictionary
+dic, jd_utility.dic 	// utility dictionary
+dic, jd_boot.dic	 	// opening and closing
+dic, jd_aitalk.dic		// randomtalk
+dic, jd_update.dic		// updates and exporting
+dic, jd_surfacing.dic	// logic behind what surface is being displayed
+dic, jd_time.dic		// things that occur as time passes naturally
+dic, jd_menus.dic		// menus and stat display
+
+//------------------------------------------------------------------------------
+// save file encryption
+// Once on, save files are encrypted.
+// [Caution] Once you turn it on, it will stay encrypted until you delete the save file, even if you turn it off!
+// It will even remain encrypted until you delete the save file!
+//------------------------------------------------------------------------------
+// save.encode,on
+
+//------------------------------------------------------------------------------
+// Execution log
+// Record the execution log in ayame.log. It is better to record it during development.
+//------------------------------------------------------------------------------
+//log, ayame.log // log to the specified file when uncommented
+ignoreiolog, ID: OnSecondChange //ignore OnSecondChange
+ignoreiolog, ID: OnMouse //Ignore the OnMouse system

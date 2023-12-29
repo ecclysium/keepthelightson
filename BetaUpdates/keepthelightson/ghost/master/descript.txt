@@ -1,0 +1,29 @@
+charset,Shift_JIS
+type,ghost
+
+//Author name 
+craftman,Ecclysium
+craftmanw,Ecclysium
+
+//ghost distribution site URL (optional / commented out)
+//craftmanurl,http://.........../
+
+//ghostname
+name,J.D.
+
+//Character name
+sakura.name,JD
+kero.name,N/A
+
+//Path to SHIORI
+shiori,yaya.dll
+
+//Do not allow unspecified senders of SSTP messages when this is 1
+sstp.allowunspecifiedsend,1
+
+//specify balloon name and path to use by default (commenting out)
+//balloon,SSPデフォルト+
+//default.balloon.path,ssp
+
+//task tray icon specification (commented out, so it will use the bell icon)
+//icon,icon.ico

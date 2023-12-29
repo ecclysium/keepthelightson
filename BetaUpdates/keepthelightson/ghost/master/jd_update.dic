@@ -1,0 +1,148 @@
+
+//---------------------------------------------------------
+//network update
+//---------------------------------------------------------
+/// Network updates not only for ghosts but also for additional shells, balloons, etc. here
+
+//Start ghost network update
+OnUpdateBegin
+{
+	"%(jdbase)%(nrto)What could be new in the bunker...?%(nrtc)\e"
+}
+
+//Start updating networks other than ghosts (can be omitted if it is common with ghosts)
+OnUpdateOtherBegin
+{
+	"%(jdbase)%(nrto)"
+	--
+	case reference[3] {
+		when 'shell' ; 'shell'
+		when 'balloon' ; 'balloon'
+		when 'headline' ; 'headline'
+		when 'plugin' ; 'plugin'
+		when 'baseware' ; 'baseware'
+		others ; (EscapeAllTags(reference[3]))
+	}
+	--
+	"%(EscapeAllTags(reference[0])) network update started.%(nrtc)"
+}
+//Network update ready
+OnUpdateReady
+{
+	//+1 to count from 0 due to "On_useorigin1" setting
+	
+	"%(jdbase)%(nrto)Total number of downloaded files is %((TOINT(reference[0])) + 1)%(nrtc)\e"
+}
+
+// End of network update
+OnUpdateComplete
+{
+	if reference[0] == "none"
+	{
+		// there was no file to be updated
+		"%(jdbase)%(nrto)No update found.%(nrtc)\e"
+	}
+	else
+	{
+		// actually completed update
+		"%(jdbase)%(nrto)Network update completed.%(nrtc)\e"
+	}
+}
+
+// network update failed
+OnUpdateFailure
+{
+	"%(jdbase)%(nrto)Network update failure\n\n[half]/
+	Reason for failure: "
+	--
+	case TOSTR(reference[0]) {
+		when 'timeout' , "too slow" ; "timeout"
+		when 'md5 miss' ; "MD5 value mismatch"
+		when '404' ; "no matching file"
+		when 'artificial ' ; "manual abort"
+		when 'fileio' ; "Out of disk space"
+		when 'readonly' ; "No directory write"
+		others ; (EscapeAllTags(reference[0]))
+	}
+	--
+	"%(nrtc)\e"
+}
+
+//Network update Start downloading
+OnUpdate.OnDownloadBegin
+{
+	"%(nrto)%(jdbase)'%(EscapeAllTags(reference[0]))' downloading...%(nrtc)" 
+}
+
+// MD5 value matching talk is omitted to shorten update time.
+//Uncomment it if you do not want to omit it.
+/*
+//Start network update MD5 value collation
+OnUpdate.OnMD5CompareBegin
+{
+	"%(jdbase)Start MD5 value matching\e"
+}
+
+//Network update MD5 value match
+OnUpdate.OnMD5CompareComplete
+{
+	"%(jdbase)MD5 value match\e"
+}
+*/
+
+//Network update MD5 value mismatch
+OnUpdate.OnMD5CompareFailure
+{
+	"%(jdbase)%(nrto)MD5 value mismatch.%(nrtc)\e"
+}
+
+
+//---------------------------------------------------------
+// File Creation
+//---------------------------------------------------------
+
+//Start creating updates2.dau
+OnUpdatedataCreating
+{
+	"%(nrto)Starting creation of update data file...%(nrtc)\e"
+}
+
+//updates2.dau creation completed
+OnUpdatedataCreated
+{
+	"%(jdbase)%(nrto)Update data created successfully.%(nrtc)\e"
+}
+
+//Start creating NAR file
+OnNarCreating
+{
+	"%(nrto)Start creating NAR file\n\n[half]/
+	//archive name
+	'%(EscapeAllTags(reference[0]))'\n/
+	//archive path
+	\_qPath > %(EscapeAllTags(reference[1]))\_q%(nrtc)\e"
+}
+
+//NAR file creation completed
+OnNarCreated
+{
+	"%(nrto)NAR file creation completed\n\n[half]"
+	--
+	case reference[2] {
+		when 'shell' ; 'shell'
+		when 'ghost' ; 'ghost'
+		when 'balloon' ; 'balloon'
+		when 'headline' ; 'headline'
+		when 'plugin' ; 'plugin'
+		when 'supplement' ; 'supplement'
+		when 'calendar skin' ; 'calendar skin'
+		when 'calendar plugin' ; 'calendar plugin'
+		when 'rss' ; 'RSS'
+		others ; (EscapeAllTags(reference[2]))
+	}
+	--
+	//archive name
+	"%(EscapeAllTags(reference[0]))\n/
+	//archive path
+	\_qPath > %(EscapeAllTags(reference[1]))\_q%(nrtc)\e"
+}

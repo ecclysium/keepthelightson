@@ -1,0 +1,58 @@
+type,shell
+charset,Shift_JIS
+
+//Author's name (English and Japanese from the top)
+craftman,Ecclysium
+craftmanw,OtherAuthorName
+
+//ghost distribution site URL (may be omitted/commented out)
+//craftmanurl,http://.........../
+
+//Name of shell (leave as is for most use)
+name,master
+
+//How to display surfaces (optional/being commented out)
+//topÅ@(Stuck at top)
+//bottomÅ@(Stuck to taskbar)
+//freeÅ@(able to be dragged and dropped anywhere)
+seriko.alignmenttodesktop,free
+
+//allow a lack of PNA files
+seriko.use_self_alpha,true
+
+//balloon position
+sakura.balloon.offsetx,0
+sakura.balloon.offsety,0
+kero.balloon.offsetx,0
+kero.balloon.offsety,0
+
+//---drawing the menu
+//image files (background from top, background when selected, sidebar)
+menu.background.bitmap.filename,menu_background.png
+menu.foreground.bitmap.filename,menu_foreground.png
+menu.sidebar.bitmap.filename,menu_sidebar.png
+
+//image position
+menu.background.alignment,lefttop
+menu.foreground.alignment,lefttop
+menu.sidebar.alignment,top
+
+//normal text color
+menu.background.font.color.r,0
+menu.background.font.color.g,0
+menu.background.font.color.b,0
+
+//text color when selected
+menu.foreground.font.color.r,255
+menu.foreground.font.color.g,255
+menu.foreground.font.color.b,255
+
+//unselectable character color
+menu.disable.font.color.r,200
+menu.disable.font.color.g,200
+menu.disable.font.color.b,200
+
+//ruled line color
+menu.separator.color.r,0
+menu.separator.color.g,0
+menu.separator.color.b,0

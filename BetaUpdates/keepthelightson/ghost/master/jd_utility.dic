@@ -1,0 +1,455 @@
+//The following is a modified version based on the ghost "Ayame Konno" dictionary
+//EscapeAllTags is Sakura script escape tag
+//Prevent Sakura scripts in variables from being executed when balloon is displayed
+//---------------------------------------------------------
+//Installation.
+//---------------------------------------------------------
+
+//Installing
+OnInstallBegin
+{
+	"%(nrto)Starting InstallationÅ.%(nrtc)\e"
+}
+
+//Installation completed
+OnInstallComplete
+{
+	"%(jdbase)%(nrto)Installation Complete\n\n[half]"
+	--
+	case reference[0] {
+		when 'shell' ; 'shell'
+		when 'ghost' ; 'ghost'
+		when 'balloon' ; 'balloon'
+		when 'headline' ; 'headline'
+		when 'plugin' ; 'plugin'
+		when 'supplement' ; 'supplement'
+		when 'calendar skin' ; 'calendar skin'
+		when 'calendar plugin' ; 'calendar plugin'
+		when 'rss' ; 'RSS'
+		others ; (EscapeAllTags(reference[0]))
+	}
+	--
+	//archive name
+	"%(EscapeAllTags(reference[1]))%(nrtc)"
+	--
+
+	//SSP only. Option to use immediately after installation (may be omitted)
+	//basewarenameex is used to obtain the name of the body during startup
+	if basewarenameex == "SSP" && "ghost" _in_ reference[0] {
+	
+		" Å°\q[Change with this ghost,ChangeLastInstalledGhost]\n/
+		Å°\q[Call this ghost,CallLastInstalledGhost]\n/
+		Å°\q[Close,InstallCompleteClose]\n"
+	}
+	elseif basewarenameex == 'SSP' && 'shell' _in_ reference[0] {
+		"Å°\q[Change to this shell,ChangeLastInstalledShell]\n/
+		Å°\q[Close,InstallCompleteClose]\n"
+	}
+	elseif basewarenameex == 'SSP' && reference[0] == 'balloon' {
+		"Å°\q[Change to this balloon,ChangeLastInstalledBalloon]\n/
+		Å°\q[Close,InstallCompleteClose]\n"
+	}
+
+	--
+	"\e"
+}
+
+//Change to the last ghost installed (own ghost end)
+// If you don't put a talk here, it will change silently
+ChangeLastInstalledGhost
+{
+	"%(jdbase)\![change,ghost,lastinstalled]\e"
+}
+
+// Call the last installed ghost
+CallLastInstalledGhost
+{
+	"%(jdbase)\![call,ghost,lastinstalled]\e"
+}
+
+//Change to the last installed shell
+ChangeLastInstalledShell
+{
+	"%(jdbase)\![change,shell,lastinstalled]\e"
+}
+
+//change to last installed balloon
+ChangeLastInstalledBalloon
+{
+	"%(jdbase)\![change,balloon,lastinstalled]\e"
+}
+
+//not using the installed one
+InstallCompleteClose
+{
+	"\1\s[-1]\b[-1]%(jdbase)\b[-1]\e"
+}
+
+//Installation failed
+OnInstallFailure
+{
+	"%(jdbase)\b[-1]\e" 
+	--
+	case reference[0] {
+		when 'unlha32' ; "unlha32 load failure"
+		when 'extraction' ; "archive corruption"
+		when 'invalid type' ; "install.txt is invalid"
+		when 'artificial' ; 'user-initiated interruption'
+		when 'unsupported' ; 'unsupported archive'
+		others ; (EscapeAllTags(reference[0]))
+	}
+	--
+	"\e"
+}
+
+//Refused to install (other ghost exists at that location)
+OnInstallRefuse
+{
+	"%(jdbase)Installation aborted due to archive dedicated to '%(EscapeAllTags(reference[0]))'.\e"
+}
+//---------------------------------------------------------
+//check your email
+//---------------------------------------------------------
+
+//Start checking email
+OnBIFFBegin
+{
+	"%(jdbase)Start checking for new mail\n\n[half]/
+	Connect to: %(EscapeAllTags(reference[2]))\e"
+}
+
+//Email check succeeded
+OnBIFFComplete
+{
+	if reference[0] == 0
+	{
+		//Total mail count 0
+		"%(jdbase)No new mail\n/
+		Total number of emails 0\n\n[half]/
+		Connected to: %(EscapeAllTags(reference[2]))\e"
+	}
+	if reference[3] > 0
+	{
+		// new mail available
+		"%(jdbase)New mail%(reference[3])\n/
+		Total number of emails%(reference[0])mails/%(reference[1])bytes\n\n[half]/
+		Connection to: %(EscapeAllTags(reference[2]))\n\n\n/
+		Å°\q[OpenMailer,OpenMailer] /
+		Å°\q[Cancel,CancelOpenMailer]\e"
+	}
+	else
+	{
+		//no new mail
+		"%(jdbase)No new mail\n/
+		Total number of mails%(reference[0])mails/%(reference[1])bytes\n\n[half]/
+		Connection to: %(EscapeAllTags(reference[2]))\n\n\n/
+		Å°\q[OpenMailer,OpenMailer] /
+		Å°\q[Cancel,CancelOpenMailer]\e"
+	}
+
+}
+//open mailer
+OpenMailer {
+	"\C\![open,mailer]\e"
+}
+
+//Do not open the mailer
+CancelOpenMailer {
+	"\b[-1]%(jdbase)\b[-1]\e"
+}
+
+//Mail check failed
+OnBIFFFailure
+{
+	"%(jdbase)Mail check failure/
+	\n\n[half]Reason for failure:"
+	--
+	case reference[0] {
+		when 'timeout' ; "No response"
+		when 'kick' ; "Authentication failure"
+		when 'defect' ; "mail configuration defective"
+		others ; (EscapeAllTags(reference[0]))
+	}
+	--
+	"\e"
+}
+
+
+//---------------------------------------------------------
+//Headlines and News
+//---------------------------------------------------------
+
+//HeadlinesenseBegin
+OnHeadlinesenseBegin
+{
+	"]%(jdbase)Headlinesense '%(EscapeAllTags(reference[0]))' Start"
+}
+
+//OnHeadlinesense
+OnHeadlinesense.OnFind
+{
+	//\filter.OnFind { //\filter.OnFind.OnFind. [set,autoscroll,disable] autoscroll prevention tag
+	//\! [set,choicetimeout,-1] timeout balloon close prevention tag
+	"%(jdbase)\b[2]\! [set,autoscroll,disable]\! [set,choicetimeout,-1]\_q"
+	--
+	// first line
+	if reference[2] == "First" || reference[2] == "First and Last"
+	{
+		// first page
+		"%(EscapeAllTags(reference[0]))"
+	}
+	elseif reference[2] == "Next"
+	{
+		//page in the middle
+		"%(EscapeAllTags(reference[0]))"
+	}
+	elseif reference[2] == "Last"
+	{
+		//Last page
+		"%(EscapeAllTags(reference[0])) (Last)"
+	}
+	--
+	//Headline body
+	"\_q\n\n[half]%(reference[3])\n"
+	--
+	//choice
+	if reference[2] == "First" || reference[2] == "Next"
+	{
+		// if there is a next page
+		"Å°\q[NextÅÀ,] /
+		Å°\q[Website,%(reference[1])] /
+		Å°\q[Cancel,HeadlineCancel]\e"
+	}
+	else
+	{
+		//If there is no next page
+		"Å°\q[Website,%(reference[1])] /
+		Å°\q[Cancel,HeadlineCancel]\e"
+	}
+}
+
+//Exit Headline
+HeadlineCancel
+{
+	"\b[-1]%(jdbase)\b[-1]\e"
+}
+
+// no headline updates were made.
+OnHeadlinesenseComplete
+{
+	"%(jdbase)Headlinesense '%(EscapeAllTags(reference[0]))' had no update.\e"
+}
+
+//Headlinesense Failure
+OnHeadlinesenseFailure
+{
+	"%(jdbase)Headlinesense Failure\n\n[half]/
+	Reason for failure:"
+	--
+	//"Unable to parse" headline is mainly due to page design changes.
+	--
+	if 'download' _in_ reference[0] ; "File cannot be acquired"
+	elseif 'analyze' _in_ reference[0] ; "Unable to analyze"
+	else ; (EscapeAllTags(reference[0]))
+	--
+	"\e"
+}
+
+//---------------------------------------------------------
+//RSS (for SSP/DAE, optional)
+//---------------------------------------------------------
+///OnRSSCompleteRSS is deemed to be common to headlines and omitted
+///(OnHeadlinesense.OnFind is called instead)
+
+//Start RSS
+//Omit it, OnHeadlinesenseBegin is called
+OnRSSBegin
+{
+	"%(jdbase)Start getting RSS '%(EscapeAllTags(reference[0]))'"
+}
+
+//RSS failure
+//If omitted, OnHeadlinesenseFailure is called
+OnRSSFailure
+{
+	"%(jdbase)RSS Acquisition Failure\n\n[half]/
+	Reason for failure:"
+	--
+	if 'download' _in_ reference[0] ; "File acquisition failed"
+	elseif 'analyze' _in_ reference[0] ; "Unable to analyze"
+	else ; (EscapeAllTags(reference[0]))
+	--
+	"\e"
+}
+//---------------------------------------------------------
+//clock adjustment
+//---------------------------------------------------------
+
+//Start clock adjustment
+OnSNTPBegin
+{
+	"%(jdbase)Start Time Check\n\n[half]/
+	Connect to: %(EscapeAllTags(reference[2]))\e"
+}
+
+//Time acquisition succeeded, comparison started
+OnSNTPCompare
+{
+	_current = reference[1]
+	_local = reference[2]
+
+	"%(jdbase)/
+	current %(_current[0])/%(_current[1])/%(_current[2]) %(_current[3]):%(_current[4]):%(_current[5])\w2\n/
+	local %(_local[0])/%(_local[1])/%(_local[2]) %(_local[3]):%(_local[4]):%(_local[5])\w2\n/
+	\n"
+	--
+	if reference[3] == 0
+	{
+		"Time offset: none \e"
+	}
+	else
+	{
+		"Time offset: %(reference[3]) seconds\n\n/
+		Å°\q[Set time,OnSNTPEXECUTE]/
+		Å°\q[Do not set time,OnSNTPCANCEL]\e"
+	}
+}
+
+// "\6" is the clock adjustment execution tag
+OnSNTPEXECUTE
+{
+	"%(jdbase)Executing clock adjustment.\6\e"
+}
+
+//clock adjustment aborted
+OnSNTPCANCEL
+{
+	"%(jdbase)Clock adjustment aborted"
+}
+
+// Clock adjustment failed
+OnSNTPFailure
+{
+	"%(jdbase)Clock adjustment failure."
+}
+
+//---------------------------------------------------------
+//URL drop
+//---------------------------------------------------------
+//also called when you start installing ghosts from the ghost installer with //CROW
+
+OnURLDropping
+{
+	"%(jdbase)Getting data for the following URLs.\n\_q%(EscapeAllTags(reference[0]))\_q\e"
+}
+
+//---------------------------------------------------------
+//File drop (optional)
+//---------------------------------------------------------
+
+OnFileDropped
+{
+	//When an image is dropped, make it the wallpaper only when it is SSP.
+	//(Use SAORI if you want to make it the wallpaper even if it is not SSP)
+	if basewarenameex == "SSP" {
+
+	_split = SPLITPATH(reference[0])
+	_ext = TOLOWER(_split[3])
+
+		if _ext=='.png' || _ext=='.gif' || _ext=='.jpg' || _ext=='.bmp' {
+
+		filepath = reference[0]
+		OnWallPaperDropped
+		}
+	}
+}
+
+//Select wallpaper set method
+// When you use this method to change the wallpaper, do not write OnWallpaperChange
+//(because OnWallpaperChange will take priority over OnWallpaperChange)
+OnWallPaperDropped
+{
+	"%(jdbase)Select how you want your wallpaper: \n\n/
+	Å°\q[Lay them out side by side,OnSetWallPaper,%(reference[0]),tile]\n/
+	Å°\q[Stretch to fit the screen,OnSetWallPaper,%(reference[0]),stretch]\n/
+	Å°\q[Center it on the screen,OnSetWallPaper,%(reference[0]),center]\n/
+	Å°\q[Cancel,CancelSetWallPaper]\e"
+}
+
+//Do not set wallpaper
+CancelSetWallPaper
+{
+	"\b[-1]%(jdbase)\b[-1]\e"
+}
+
+//Execute wallpaper set
+OnSetWallPaper
+{
+	_split = SPLITPATH(reference[0])
+	_filename = _split[2] + _split[3]
+
+	"\![set,wallpaper,%(reference[0]),%(reference[1])]%(jdbase)%(nrto)Changing wallpaper to %(EscapeAllTags(_filename)). It's the little pleasures that make life fun, isn't it?%(nrtc)\e"
+}
+
+
+
+//---------------------------------------------------------
+// Error Logging (optional)
+//---------------------------------------------------------
+#globaldefine INSERTDELIM "##"
+
+//Set up the queue
+initerrorqueue{
+	messageQueue = IARRAY
+}
+
+//Should be called from OnSecondChange
+//Sends the earliest arriving message from the error/message Queue.
+checkErrorQueue{
+	//If there is content to be sent as a message/error
+	if ARRAYSIZE(messageQueue) != 0{
+		//get this element
+		_item = messageQueue[0]
+		//Send its contents as separate 
+		ErrorLog(_item[0,INSERTDELIM],_item[1,INSERTDELIM])
+		//Delete this element now that it has been sent
+		messageQueue[0] = IARRAY
+	
+	}
+}
+
+
+//Put the message into the queue
+//if being used, in the form of SENDERROR("[Message]","[warning/info/error]")
+//if no type is specified, warning is used
+SENDERROR{
+	
+	//The delimiter cannot be used inside the message
+	if INSERTDELIM _in_ _argv[0] || INSERTDELIM _in_ _argv[1]{
+		_message = "Invalid error message: message contains system delimiter"
+		_message += INSERTDELIM
+		_message += "warning"
+		messageQueue,= _message
+	}else{
+	//Otherwise, the message is valid and may be sent to the queue.
+		_message = _argv[0]
+		_message += INSERTDELIM
+		_message += _argv[1]
+		messageQueue,= _message
+	}
+
+}
+
+//Log an error 
+ErrorLog
+{
+    _level = "warning" //It defaults to warning if it doesn't recognize what you've put in, so I will too. Other options are 'critical' and 'info'
+    if _argv[1] != ""; _level = _argv[1]
+	_errordesc = _argv[0]+C_BYTE1
+    SHIORI3FW.PushAdditionalReturn('ErrorLevel',_level)
+    SHIORI3FW.PushAdditionalReturn('ErrorDescription',_argv[0])
+	
+	
+}
+
+

@@ -1,0 +1,260 @@
+
+//---------------------------------------------------------
+// Load/Unload events (can be removed if not needed)
+//---------------------------------------------------------
+// Ghost startup and termination, SHIORI reload, etc.
+
+// Loading ghosts
+// Initialization of variables for each startup, etc, is done here
+OnGhostLoad
+{
+	initerrorqueue //For error logging. Remove if the related functions in the end of utility.dic are removed.
+}
+
+// Unload ghosts
+// Delete variables on exit, etc, here
+OnGhostUnload
+{
+	//Delete variables used in stroke response
+	ERASEVAR('stroke')
+	ERASEVAR('prev_reference4')
+	ERASEVAR('nade_prev')
+	
+	// Last end time. Recorded as it may be used later (can be omitted)
+	// (for reactions to long periods of inactivity, etc.)
+	LastCloseTime = GETTIME
+}
+
+//---------------------------------------------------------
+//Startup/Exit
+//---------------------------------------------------------
+
+//First Boot (The first time the ghost ever opens)
+OnFirstBoot : all 
+{
+	//Initialization of variables
+	OnFirstBootVariables
+	resets = reference[0]
+	
+	//Time of first boot. Record this as it may be used later (may be omitted)
+	FirstBootTime = GETTIME
+
+	//Determine if it is a true first time or not by looking at the Vanish (Uninstalled) count
+	//if reference[0] == 0
+	
+	tutorialmode = 1 //increments in stages
+	powerpercent -= 1
+	
+	"\1\s[-1]%(jdbase)%(nrto)The wind gusts from the open latch. \w6It whistles and groans, \w4in loops and in waves, \w4taking up as much of the room as it can and not letting life get a word in. \w8Snow coasts along it, \w4a terrifying sidekick, \w4speckling upon skin as tiny bullets.%(nrtc)"
+	"\x%(nrto)The piercing scent of cold permeates everything, \w4and with a groan and a creak, the latch closes. \w8\w8The lights flicker on.%(nrtc)"
+	"\x%(nrto)The figure descends the ladder, \![embed,Onjdactionoverride,9]\w4and drags a too-tired body over to a large wheel set in the ground.%(nrtc)"
+	"\x*Creaaak. \w6Creaaak. \w6Creeaaaaak.*"
+	"\x%(nrto)The person forces it to move against all odds. \w8The frozen body of the wheel protests, \w4as does every life in the face of the bitter cold.%(nrtc)"
+	"\x.\w8\w8\w8.\w8\w8\w8."
+	"\x%(nrto)\i[182]The yellow light on the generator stabilizes to green.%(nrtc)"
+	"\x%(nrto)The person gets up, \![embed,Onjdactionoverride,2]\i[182]just to ruffle through a bag produced from the inside of their old, burnt orange winter coat, and pull out three indistinct cans. They futilely pry at it with their gloved hands.%(nrtc)"
+	"\xIt won't open... \w6come on, \w4I'm so hungry..."
+	"\x%(nrto)Eventually, \w4after a bit of struggling with the locked away food, \w4a soft hiccup echoes in the miniscule chamber.%(nrtc)"
+	//play soft crying
+	"\x%(nrto)Roll your mousewheel to comfort them.%(nrtc)\w8\x"
+	
+}
+
+OnFirstBootVariables : void{
+
+	//Management/config variables
+	username = "User"
+	debug = 0
+	sfxvolume = 75
+	difficulty = 2 // 1 is easy, 2 is mid, 3 is hard
+	fontheight = 12
+	TALK_INTERVAL = 600
+	tempform = "F"	//F for Farenheit, C for Celsius, K for Kelvin
+	autoinventory = 1 //is JD allowed to use the inventory on their own? (will not apply to beans)
+	
+	//Statistics
+	adventureshad = 0
+	foodgathered = 0
+	powerhandgenerated = 0
+	powergenerated = 0
+	timestouched = 0
+	timeslept = 0
+	hoursalone = 0
+	timessanitydropped = 0
+	dayshere = 13 //JD has been here for nearly two weeks before they begin "hallucinating" the user
+	minuteshere = 0 //for counting the passage of time
+	 
+	//JD'S STATE AND WELLBEING VARS
+	jdaction = 4
+	jdtemp = 97.8
+	jdhunger = 19	//out of 100
+	jdthirst = 85 	//out of 100
+	jdenergy = 50
+	jdsanity = 99
+	checkingtemp = 0 //bool for when they're trying to see if its safe to head out
+	givenup = 0 //when there is no chance of survival (starving and too tired to adventure)
+	causeofdeath = ""
+	jddamage = 100 //JD sustains damage when temperature drops particularly low
+	
+	//EFFECTS ON JD YOU HAVE
+	jdtiredness = 0 //increase it by running the mousewheel to convince JD to go to bed
+	jdalarm = 0 //when you interfere, you increase this variable, which decreases sanity
+	jdconsumeestro = 1 //They consume estrogen by default
+	
+	
+	//ROOM STATE VARIABLES
+	roomtemp = 60.0
+	powerpercent = 16.5
+	powerdied = 0 //the generator won't turn on lights until it's back at 5 percent
+	powerout = 0
+	
+	//RESOURCE VARIABLES
+	initializeinventory
+
+	
+	
+	//OUTDOOR VARIABLES
+	outsidetemp = 2
+	timeleftoutside = -1 //-1 means Inside
+
+}
+
+initializeinventory{
+	//0 - beans, 1 - tuna, 2 - water, 3 - handwarmers, 4 - thread, 5 - cloth scraps, 6 - estrogen?
+	jdinventory = IARRAY
+	jdinventory ,= 3						// beans
+	jdinventory ,= 0						// tuna
+	jdinventory ,= 3 * (4 - difficulty)		// water
+	jdinventory ,= 1						// handwarmers
+	jdinventory ,= 5						// thread uses
+	jdinventory ,= 0						// cloth scraps
+	jdinventory ,= 16						// days worth of estrogen
+
+}
+
+//Startup
+OnBoot
+{
+	"\1\s[-1]%(jdbase)%(nrto)The bunker fades into view. The lights flicker eerily.%(nrtc) \e"
+}
+
+//End.
+//Be sure to put \- at the end (without description, some baseware will not be able to terminate)
+OnClose
+{
+	"\1\s[-1]%(jdbase)%(nrto)The lights flicker as the bunker fades from view.%(nrtc)\w9\w9\w9\w9\-\e"
+}
+
+//---------------------------------------------------------
+// Changing between ghosts
+//---------------------------------------------------------
+
+
+// Take over from other ghosts (Switched to, where the other one is closed)
+// If omitted, OnBoot is used instead
+OnGhostChanged
+{
+	//Insert this ghost's sakura.name in "".
+	if reference[0] == "J.D." {
+		"\1\s[-1]%(jdbase)Bunker reloaded. \e"
+	}
+
+	else {
+		//EscapeAllTags is Sakura script escape tag
+		//It is safer to include it when displaying a balloon of text that is unpredictable as to what it contains
+		//"\1\s[-1]%(jdbase)%(EscapeAllTags(reference[0])) took over from you. \e"
+	}
+}
+
+// Substituted by another ghost (own ghost ends)
+// If omitted, OnClose is substituted
+OnGhostChanging
+{
+	// Put this ghost's sakura.name in "".
+	if reference[0] == "J.D." {
+		"\1\s[-1]%(jdbase)%(nrto)Bunker reloaded.%(nrtc)\w9\e"
+	}
+
+	else {
+		//"\1\s[-1]%(jdbase)%(nrto)Good luck with %(EscapeAllTags(reference[0])).%(nrtc)\w9\w9\w9\w9\e"
+	}
+}
+
+//---------------------------------------------------------
+// Multiple ghost startup-related events (for SSP only) (may be omitted)
+//---------------------------------------------------------
+/*
+//Called by other ghosts (OnBoot if omitted) (own ghost startup)
+OnGhostCalled
+{
+	"\1\s[-1]%(jdbase)Let's call in %(EscapeAllTags(reference[0])). \e"
+}
+
+// call other ghosts
+OnGhostCalling
+{
+	"\1\s[-1]Call %(jdbase)%(EscapeAllTags(reference[0])). \e"
+}
+
+//Called ghost completes startup script
+OnGhostCallComplete
+{
+	"\1\s[-1]%(jdbase)%(EscapeAllTags(reference[0])) has finished calling me. \e"
+}
+
+//Multiple starting other ghosts finished
+OnOtherGhostClosed
+{
+	"\1\s[-1]%(jdbase)%(EscapeAllTags(reference[0])) has left. \e"
+}
+
+//Other ghosts taking over during multiple startups
+OnOtherGhostChanged
+{
+	"\1\s[-1]%(jdbase)%(EscapeAllTags(reference[0])) left and was replaced by %(EscapeAllTags(reference[1])). \e"
+}
+*/
+
+//Other ghosts disappear during multiple activations
+OnOtherGhostVanish
+{
+	"\1\s[-1]%(jdbase)Colder and colder...\e"
+}
+
+//---------------------------------------------------------
+//Disappearance event (may be omitted)
+//---------------------------------------------------------
+//But OnVanishSelected is not substituted by other events if omitted
+
+//Vanish instruction
+OnVanishSelecting
+{
+	"%(jdbase)%(nrto)Could you not keep the lights on?%(nrtc)\e"
+}
+
+//VanishCancel (NO was selected in the confirmation dialog)
+OnVanishCancel
+{
+	"%(jdbase)%(nrto)So, you'll try for a little longer.%(nrtc)\e"
+}
+
+//Double-click to abort disappearance
+OnVanishButtonHold
+{
+	"%(jdbase)%(nrto)Are you certain about your decision?%(nrtc)\e"
+}
+
+//Execute annihilation (YES is selected in the confirmation dialog)
+//Random replacement by other ghosts after disappearance
+OnVanishSelected
+{
+	"%(jdbase)%(nrto)Better luck elsewhere.%(nrtc)\w9\w9\w9\w9\e"
+}
+
+//other ghosts disappear and are replaced by you (OnGhostChanged if omitted) (own ghost startup)
+OnVanished
+{
+
+	"\1\s[-1]%(jdbase)It's getting colder...\e"
+	
+}

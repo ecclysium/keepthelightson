@@ -1,0 +1,137 @@
+//Surfacing
+
+charset,Shift_JIS
+version,1
+option,DisableNoDefineSurfaces
+
+
+surface0
+{
+// This is the 'thumbnail' image. It is left as a composite image, instead of split into parts like the ghost is when functioning.
+}
+
+
+surface1010{
+
+	//THE BUNKER------------------------------------------------------------------------
+	//base
+	animation100.interval,runonce
+	animation100.pattern0,overlay,10100,0,0,0
+	
+	//base flicker
+	animation101.interval,never
+	animation101.pattern0,overlay,10101,0,0,0
+	animation101.pattern0,overlay,10100,130,0,0
+	animation101.pattern0,overlay,10101,1700,0,0
+	animation101.pattern0,overlay,10100,1000,0,0
+	
+	//generator full power 6/6
+	animation186.interval,never
+	animation186.pattern0,overlay,10100,0,0,0
+	
+	//wheel
+	animation190.interval,runonce
+	animation190.pattern0,overlay,10100,0,0,0
+	
+	//wheel flicker
+	animation191.interval,never
+	animation191.pattern0,overlay,10101,0,0,0
+	animation191.pattern1,overlay,10100,130,0,0
+	animation191.pattern2,overlay,10101,1700,0,0
+	animation191.pattern3,overlay,10100,1000,0,0
+	
+	//Layering Parts that Break The Mold-------------------------------------------------
+	//wheel
+	animation330.interval,never
+	animation330.pattern0,overlay,10100,0,0,0
+	
+	//sleeping flicker
+	animation331.interval,never
+	animation331.pattern0,overlay,10101,0,0,0
+	animation331.pattern1,overlay,10100,130,0,0
+	animation331.pattern2,overlay,10101,1700,0,0
+	animation331.pattern3,overlay,10100,1000,0,0
+	
+	//wheel moving
+	animation332.interval,never
+	animation332.pattern0,overlay,10100,0,0,0
+	
+	//wheel moving flicker
+	animation333.interval,never
+	animation333.pattern0,overlay,10101,0,0,0
+	animation333.pattern1,overlay,10100,130,0,0
+	animation333.pattern2,overlay,10101,1700,0,0
+	animation333.pattern3,overlay,10100,1000,0,0
+	
+	
+	//WARM JD----------------------------------------------------------------------------
+	//eating on bed
+	animation420.interval,never
+	animation420.pattern0,overlay,10100,0,0,0
+	
+	//eating on bed flicker
+	animation421.interval,never
+	animation421.pattern0,overlay,10100,0,0,0
+	
+	//sleeping
+	animation430.interval,never
+	animation430.pattern0,overlay,10100,0,0,0
+	
+	//sleeping flicker
+	animation431.interval,never
+	animation431.pattern0,overlay,10100,0,0,0
+	
+	//ladder
+	animation450.interval,never
+	animation450.pattern0,overlay,45000,0,0,0
+	
+	//ladder flicker
+	animation451.interval,never
+	animation451.pattern0,overlay,45010,0,0,0
+	
+	//turning wheel
+	animation490.interval,never
+	animation490.pattern0,overlay,10100,0,0,0
+	
+	//turning wheel flicker
+	animation491.interval,never
+	animation491.pattern0,overlay,10100,0,0,0
+	
+	//COLD JD----------------------------------------------------------------------------
+	//eating on bed
+	animation520.interval,never
+	animation520.pattern0,overlay,10100,0,0,0
+	
+	//eating on bed flicker
+	animation521.interval,never
+	animation521.pattern0,overlay,10100,0,0,0
+	
+	//sleeping
+	animation530.interval,never
+	animation530.pattern0,overlay,10100,0,0,0
+	
+	//sleeping flicker
+	animation531.interval,never
+	animation531.pattern0,overlay,10100,0,0,0
+	
+	//ladder
+	animation550.interval,never
+	animation550.pattern0,overlay,10100,0,0,0
+	
+	//ladder
+	animation551.interval,never
+	animation551.pattern0,overlay,10100,0,0,0
+	
+	//turning wheel
+	animation590.interval,never
+	animation590.pattern0,overlay,10100,0,0,0
+	
+	//turning wheel flicker
+	animation591.interval,never
+	animation591.pattern0,overlay,10100,0,0,0
+	
+}
+
+
+
+

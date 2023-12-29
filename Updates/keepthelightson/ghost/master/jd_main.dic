@@ -1,0 +1,498 @@
+//---------------------------------------------------------
+// Globally Defined Variables
+//---------------------------------------------------------
+#globaldefine POWERSTAGES 6
+
+//---------------------------------------------------------
+// Choice Usage
+//---------------------------------------------------------
+
+//Execute the choice name
+OnChoiceSelect
+{
+	_id = reference[0]
+	if ISFUNC(_id) {
+		EVAL(_id)
+	}
+}
+
+OnChoiceSelectEx
+{
+	_id = reference[1]
+	if ISFUNC(_id) {
+		EVAL(_id)
+	}
+}
+
+//Execute the anchor
+OnAnchorSelect
+{
+	_id = reference[0]
+	//If there is "http://~" at the beginning of the ID of the anchor, the Web site is opened.
+	//If you include this, you can jump to the URL by clicking on the article title when displaying RSS.
+	if RE_MATCH(_id, 'http://. +') {
+		_url = AYATEMPLATE.EscapeText(_id)
+		"\C\j[%(_url)]\e"
+	// otherwise jump to the event with the same name as the ID
+	} elseif ISFUNC(_id) {
+		EVAL(_id)
+	}
+}
+OnAnchorSelectEx
+{
+	_id = reference[1]
+	//If there is "http://~" at the beginning of the ID of the anchor, it opens the Web site.
+	//If you include this, you can jump to the URL by clicking on the article title when displaying RSS.
+	if RE_MATCH(_id, 'http://. +') {
+		_url = AYATEMPLATE.EscapeText(_id)
+		"\C\j[%(_url)]\e"
+	// otherwise jump to the event with the same name as the ID
+	} elseif ISFUNC(_id) {
+		EVAL(_id)
+	}
+}
+
+//------------------------------------------------------------------------------
+
+//------------------------------------------------------------------------------
+
+// Choice timeout (optional) (commented out)
+// This occurs when a choice is left unexecuted. Please note that this can be annoying depending on how you use it.
+/*
+OnChoiceTimeout
+{
+	"%(jdbase)Choice timed out. \e"
+}
+*/
+
+//---------------------------------------------------------
+// Input Boxes
+//---------------------------------------------------------
+
+//InputBox with the same name as inpuyt
+// Execute the event with the same name as the ID
+OnUserInput
+{
+	EVAL(reference[0])
+}
+
+//---------------------------------------------------------
+// Mouse double click (optional)
+//---------------------------------------------------------
+/// If a character that cannot be used in the function name, such as a half-width space, is used in the hit judgment identifier, this method using EVAL cannot be used.
+// The same applies to other mouse events.
+
+// Execute the "MouseDoubleClick_(character number)(hit identifier)" event when clicked.
+OnMouseDoubleClick
+{
+	EVAL("MouseDoubleClick_%(reference[3])%(reference[4])")
+}
+
+OnMouseMultipleClick
+{
+	EVAL("MouseMultipleClick_%(reference[3])%(reference[4])")
+}
+
+MouseMultipleClick_0JD
+{
+	if tutorialmode == 2{
+		"%(nrto)They seem panicked.%(nrtc) \n\n[half]Huh!? \w6This. \w4This is wrong, \w2what the--"
+		--
+		"\x%(nrto)Or was it double click to poke them?%(nrtc)"
+		tutorialmode = 3
+	}
+	
+}
+
+
+
+//Double-click on the main character's head
+MouseDoubleClick_0Head
+{
+	"%(jdbase) Double click on the main character's head. \e"
+}
+
+//Double-click on the part of the main character that has no hit detection.
+//Jump to a random talk event here
+MouseDoubleClick_0
+{
+	//OnAiTalk
+	"%(jdbase)"
+}
+
+//Double-click on the part of the sub character that has no hit detection
+MouseDoubleClick_1
+{
+	"%(jdbase)\1Double click on sub character. \e"
+}
+
+//---------------------------------------------------------
+// Mouse Movement (Petting)
+//---------------------------------------------------------
+OnMouseMove
+{
+	//natural mouse response
+	// (modified from the statement Wiki description "Make the mouse response natural")
+	if reference[4] != "" {
+
+		//---- somewhere is stroked
+		if reference[4] == prev_reference4 {
+			_nade_interval = systemuptime - nade_prev
+
+			if _nade_interval > 1 {
+				//Reset the counter if the interval is more than 1 second
+				stroke = 0
+
+			}
+			nade_prev = systemuptime
+			stroke++
+
+			//Determine that a stroke is "being stroked" when the amount of stroking reaches a certain amount
+			// (The larger the value of * in "stroke >= *", the slower the response)
+			if stroke >= 96 {
+				// Stroked. Look at the stroked area and talk to it
+				// Event name is "MouseReaction_(character number)(hit decision identifier)
+				EVAL("MouseReaction_%(reference[3])%(reference[4])")
+				--
+				stroke = 0
+
+			}
+		}
+		else {
+			stroke = 0
+		}
+		prev_reference4 = reference[4]
+	}
+	else {
+		// none of the defined areas are stroked
+		stroke = 0
+	}
+}
+
+
+MouseReaction_0Wheel{
+	if jdaction != 9{
+		"\C%(turnwheel)"
+		--
+		if jdaction != 3 && jdaction != 6  && jdaction < 10{
+			DialogueOnWheelTurn
+		}
+		--
+		if (powerpercent + (1 / (difficulty-.8))) < 100{
+			powergenerated += TOREAL(1) / (difficulty-.8)
+			powerpercent += TOREAL(1) / (difficulty-.8)
+			powerhandgenerated += TOREAL(1) / (difficulty-.8)
+		}
+	}
+	
+}
+
+OnMouseWheel_0Wheel{
+	if jdaction != 9{
+		"\C%(turnwheel)"
+		--
+		if jdaction != 3 && jdaction != 6  && jdaction < 10{
+			DialogueOnWheelTurn
+		}
+		--
+		if (powerpercent + (.5 / (difficulty-.8))) < 100{
+			powergenerated += TOREAL(.5) / (difficulty-.8)
+			powerpercent += TOREAL(.5) / (difficulty-.8)
+			powerhandgenerated += TOREAL(.5) / (difficulty-.8)
+		}
+	}
+	
+}
+
+
+OnMouseLeave{
+	if reference[4] == "Wheel" && jdaction != 9{
+		"\C%(stopwheelturn)"
+	}
+}
+
+OnMouseWheel{
+	mousewheelmonitor++
+	if mousewheelmonitor > 10{
+		EVAL("OnMouseWheel_%(reference[3])%(reference[4])")
+		mousewheelmonitor = 0
+	}
+	
+}
+
+OnMouseWheel_0JD{
+	if tutorialmode == 0 {
+		jdtiredness++
+		timestouched++
+		if jdtiredness == 2{
+			//jdaction = 3
+			DialogueConvinceToSleep
+		}elseif jdtiredness > 2{
+			jdaction = 3
+			"%(jdbase)"
+		}
+	}elseif tutorialmode == 1{
+		tutorialmode = 2
+		"W... what was that? \n\n%(nrto)Triple click to poke them.%(nrtc)"
+	}elseif tutorialmode == 4{
+		jdaction = 3
+		powerpercent -= 2
+		"Oh, urgh. \w6Maybe I should sleep first. \w8I was out in the cold a while.\w4.\w4. I'll feel better in the morning. \![embed,Onjdactionoverride,3]\i[182]\w6I'll stop hallucinating.\n\n[half]\w8"
+		--
+		"%(nrto)%(jdbase)The light on the generator turns to yellow again. Scroll or circle over the wheel to keep the lights on.%(nrtc)\n\n[half]"
+		--
+		"%(nrto)Keep the lights on.%(nrtc)\n\n[half]%(nrto)Keep the lights on.%(nrtc)\n\n[half]%(nrto)They will be counting on you.%(nrtc)\x"
+		tutorialmode = 0
+	
+	}
+
+}
+
+
+//---------------------------------------------------------
+//key entry (optional)
+//---------------------------------------------------------
+
+//Jump to "KeyPress_(key name)" event when key is pressed
+OnKeyPress{
+	EVAL("KeyPress_%(reference[0])")
+}
+
+//Example of key reaction (commented out)
+/*
+KeyPress_a {
+	"%(jdbase)"A" key was pressed. \e"
+}
+*/
+
+//---------------------------------------------------------
+//Minimize (optional)
+//---------------------------------------------------------
+
+//minimize instructions (for SSP) (currently commented out)
+//*Note: May disturb users.
+/*
+OnWindowStateMinimize {
+	"%(jdbase) minimize. \e"
+}
+*/
+
+//---------------------------------------------------------
+// Time Progression Events
+//---------------------------------------------------------
+
+//is called once per second. If removed, the AI talk event will not occur.
+//Place an empty one even if you do not use it.
+OnSecondChange
+{	
+	MikireKasanari
+	if debug == 1; checkErrorQueue //Comment out if you remove the error functions seen in utility.dic
+}
+
+// Sequence of "Out-of-sight" and "Overlapping" events that occur after a slight pause (may be omitted).
+// (Modified from the Wiki article "Out-of-sight/overlapping reactions in the style of Riri-no-Sato")
+MikireKasanari 
+{
+	// Out-of-sight reaction (5 seconds after the main character is out of sight)
+	if reference[1] && !mikireflag {
+		mikiretimer--
+		if mikiretimer < 1 {
+			mikireflag = 1
+			//"\1\s[10]%(jdbase) Out of sight reaction. \e"
+		}
+	}
+	else {
+		mikiretimer = 5
+	}
+
+	// end of out-of-sight reaction (immediately after the end of out-of-sight)
+	if mikireflag && !reference[1] {
+		mikireflag = 0
+		//"\1\s[10]%(jdbase) end of out-of-sight. \e"
+	}
+
+	//overlap reaction (after 5 seconds of overlap between main and sub characters)
+	elseif !kasanariflag && reference[2] {
+
+		if ISVAR('kasanaritimer') == 0 {
+			kasanaritimer = 5
+		}
+
+		kasanaritimer-- 
+		if kasanaritimer < 1 {
+			kasanariflag = 1
+			//"\1\s[10]%(jdbase) overlap reaction. \e"
+		}
+	}
+	// overlap end reaction (just after the end of overlap)
+	elseif kasanariflag && !reference[2] {
+		kasanariflag = 0
+		kasanaritimer = 5
+		//"\1\s[10]%(jdbase) overlap end. \e"
+	}
+	else {
+		kasanaritimer = 5
+	}
+}
+
+
+//---------------------------------------------------------
+//shell change (may be omitted).
+//---------------------------------------------------------
+
+//Start shell changing
+OnShellChanging {
+	"%(nrto)Change%(jdbase) shell to '%(EscapeAllTags(reference[0]))'. %(nrtc)\e"
+}
+
+//Complete shell change
+OnShellChanged {
+	"%(nrto)Changed shell to '%(EscapeAllTags(reference[0]))'.%(nrtc)\e"
+}
+
+//---------------------------------------------------------
+//return after the same surface for a certain amount of time.
+//---------------------------------------------------------
+//Optional, but it is more natural to do so for general ghosting.
+
+OnSurfaceRestore { 
+	if tutorialmode == 0{
+		"\1\s[-1]%(jdbase)" 
+	}
+}
+
+//---------------------------------------------------------
+//Network status (can be omitted)
+//---------------------------------------------------------
+
+//The other server did not respond in time (commenting out).
+/*
+OnNetworkHeavy
+{
+	"%(jdbase) Network congestion. \e"
+}
+*/
+//---------------------------------------------------------
+//Owner draw menu resource (optional/commented out).
+//---------------------------------------------------------
+
+/*
+//Recommend site button caption (main body side)
+On_sakura.recommendbuttoncaption { "recommended sites" }
+
+//recommended site link
+//1st line site title
+//2nd line: site URL
+//3rd line: banner URL (may be omitted)
+// or banner file name in master\banner directory (no extension)
+//4th line Talk when jumping (may be omitted)
+//Lines are separated by %(CHR(1)) at the end, and by %(CHR(2)) for each link item.
+
+On_sakura.recommendsites
+{"/
+	Site title1%(CHR(1))/
+	http://....... /%(CHR(2))/
+
+	Site title2%(CHR(1))/
+	http://....... /%(CHR(2))/
+"}
+
+// portal site button caption (main body side)
+On_sakura.portalbuttoncaption { "portal site" }
+
+// portal site link
+// description method is the same as recommended site link
+On_sakura.portalsites
+{ "/
+	Site title 1%(CHR(1))/
+	http://....... /%(CHR(2))/
+
+	Site title2%(CHR(1))/
+	http://....... /%(CHR(2))/
+"}
+
+// Disappear instruction button display switching
+// "0" to hide, "0" otherwise to show
+On_vanishbutton.visible { 
+	'1' 
+}
+*/
+
+//---------------------------------------------------------
+//Network update resource
+//---------------------------------------------------------
+
+//URL that will be the reference position for network updates
+//// If there is a network update, be sure to uncomment it and write the URL
+On_homeurl { 
+	if betaupdates == 1{
+		"https://raw.githubusercontent.com/Ecclysium/keepthelightson/master/BetaUpdates/keepthelightson/"
+	}else{
+		"https://raw.githubusercontent.com/Ecclysium/keepthelightson/master/Updates/keepthelightson/"
+	}
+	
+}
+
+
+//Count the number of files at the time of network update from 1
+//On_homeurl { " /" }/// Set the number of files to be counted from 1 when updating the network to 0 as in MATERIA
+On_useorigin1 { 
+	'0' 
+}
+
+//---------------------------------------------------------
+//other resources
+//---------------------------------------------------------
+
+//Use when %username is specified in sstp etc.
+On_username {
+	username
+}
+
+nrto{
+	"(\f[italic,1]"
+}
+
+nrtc{
+	"\f[italic,0])"
+
+}
+
+SHORTFORM{
+	_text = SUBSTR(TOSTR(_argv[0]),0,5)
+	"%_text"
+}
+
+TEMPFORM{
+	_temp = _argv[0]
+	case tempform{
+		//Farenheit is as shown
+		when "F"{
+			_temp = SUBSTR(TOSTR(_argv[0]),0,5)
+			"%_temp F"
+		}
+		//Celsius is a quick conversion
+		when "C"{
+			_temp = SUBSTR(TOSTR(FtoC(_argv[0])),0,5)
+			"%_temp C"
+		}
+		others{
+			//others is Kelvin
+			_temp = SUBSTR(TOSTR(FtoK(_argv[0])),0,5)
+			"%_temp K"
+			
+		}
+	}
+}
+
+
+FtoC{
+	"%((_argv[0] - 32) * (5.0 / 9.0))"
+}
+
+FtoK{
+	((_argv[0] - 32)*(5.0 / 9.0) + 273.15)
+}
+
+
+

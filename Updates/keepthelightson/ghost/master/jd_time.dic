@@ -1,0 +1,598 @@
+//---------------------------------------------------------
+// Passing Of Time Functions
+//---------------------------------------------------------
+
+
+// called once per minute 
+OnMinuteChange
+{
+	if tutorialmode == 0 {
+		if minute == 0{
+			OnHourChange
+		}
+		
+		prevaction = jdaction
+		prevsanity = jdsanity
+		OnMinuteTemp(1)		//temp fluctuates and effects itself
+		OnMinuteVitals(1)	//JD's vitals change
+		OnMinutePower(1)	//Electricity decays unless being recharged
+		OnMinuteAction(1)	//JD decides what to do next
+		
+		//Check if this is a new drop to 0 sanity.
+		if jdsanity == 0 && prevsanity != 0{
+			//There is some forgivingness on this statistic.
+			if prevsanity > 2{
+				timessanitydropped++
+			}
+		}
+		--
+		//Manage counters
+		if jdtiredness > 0{
+			jdtiredness --
+		}
+		--
+		if jdaction != prevaction; "%(jdbase)"
+	
+	}
+	minuteshere++
+	if minuteshere >= 2400{
+		minuteshere = 0
+		dayshere++
+		if jdconsumeestro == 1 && jdinventory[6] > 0{
+			jdinventory[6]--
+			if jdsanity < 90{
+				jdsanity = 90
+			}
+		}
+	}
+
+}
+
+//On the hour
+OnHourChange{
+	//ELEPHANT: make it reliant on timeslots
+	//Update outdoors temperature
+	if outsidetemp < -10 {
+		//if it's really cold, it'll warm up a bit
+		outsidetemp += RAND(2)
+	}elseif outsidetemp < 30{
+		//if it's cold, it can get colder or warmer
+		outsidetemp += RAND(2) - 1
+	}elseif outsidetemp > 35{
+		//if it's getting warmer, it will definitely cool down
+		outsidetemp -= RAND(2)
+	}
+
+}
+
+//TEMPERATURE LOGIC--------------------------------------------
+OnMinuteTemp{
+	_mult = _argv[0]
+	
+	//ROOM TEMP
+	if powerout{
+		//temperature stabilizes after getting to 5
+		if roomtemp > 5{
+			roomtemp--
+		}
+	}else{
+		if roomtemp < 63{
+			roomtemp += .5
+		}
+	}
+	
+	//JD TEMP
+	if jdaction == 6{
+		jdtemp = roomtemp
+	}if jdaction == 16{
+		jdtemp = outsidetemp
+	}elseif jdaction != 10{
+		if roomtemp <= 32{
+			jdtemp -= .15
+		}elseif roomtemp < 45 && jdtemp > 95{
+			jdtemp -= .05
+		}elseif jdtemp < 98 && roomtemp > 55{
+			jdtemp += .2
+		}
+	}else{
+		//When JD is out adventuring, it's rare that they'll die from the cold, but possible if they're already cold.
+		if outsidetemp <= 0 && jdtemp > outsidetemp{
+			//jdtemp -= .10
+			//Calculate the decay in temperature, but be certain it isn't an accidental gain.
+			_tempchange = SIN(((jdtemp+35)/20)*.03)
+			if _tempchange < .003{
+				_tempchange = .003
+			}
+			jdtemp -= _tempchange
+		}elseif outsidetemp < 32 && jdtemp > 95 {
+			_tempchange = SIN(((jdtemp+35)/20)*.01)
+			if _tempchange < .001{
+				_tempchange = .001
+			}
+			jdtemp -= _tempchange
+		}elseif jdtemp < 98 && outsidetemp > 32{
+			jdtemp += .2
+		}
+	}
+	
+
+}
+
+//JD VITALS LOGIC----------------------------------------------
+OnMinuteVitals{
+	_mult = _argv[0]
+	
+	if jdaction != 6 && jdaction != 16{
+		OnHungerDecay
+	}
+	
+	
+	case jdaction{
+		when 2{
+			//Energy will always decay unless they are asleep
+			OnEnergyDecay
+			
+			//JD simultanously eats and drinks
+			//here they eat
+			if jdhunger < 25 && jdinventory[0] >= .5{
+				jdinventory[0] -= .5
+				jdhunger += 10
+			}elseif jdinventory[0] >= 0.10{
+				jdinventory[0] -= .1
+				jdhunger += 2
+			}
+			
+			//now they drink
+			if jdthirst < 25 && jdinventory[2] >= .5{
+				jdinventory[2] -= .5
+				jdthirst += 50
+			}elseif jdinventory[2] >= .1 && jdthirst <=90{
+				jdinventory[2] -= .1
+				jdthirst += 10
+			}
+			
+			//make sure things didn't accidentally dip or are at -0
+			if jdinventory[0] < 0{
+				jdinventory[0] = 0
+			}
+			if jdinventory[2] < 0{
+				jdinventory[2] = 0
+			}
+		}
+		//when asleep
+		when 3{
+			timeslept++
+			case difficulty{
+				//medium
+				when 2{
+					jdenergy += .196 * _mult
+				}
+				//hard
+				when 3{
+					jdenergy += .175 * _mult
+				}
+				//easy
+				others{
+					jdenergy += .238 * _mult
+				}
+			}
+		}
+		when 4,5{
+			OnEnergyDecay
+		}
+		when 6, 16{
+			//They are dead.
+		}
+		when 9{
+			OnEnergyDecay
+		}
+		when 10{
+			OnEnergyDecay
+			OnEnergyDecay
+			
+			//JD Eats Some Snow (and takes a small temperature hit)
+			if jdthirst < 10{
+				jdthirst = 15
+				OnMinuteTemp(1)
+				
+			}
+			
+			//if JD has handwarmers, they'll use it if they're freezing
+			if jdtemp < 89 && jdinventory[3] > 0{
+				jdinventory[3]--
+				jdtemp = 97
+			}
+			
+		}
+		when 11{
+			OnEnergyDecay
+			OnEnergyDecay
+			//they just refilled a water bottle with snow to melt
+			jdinventory[2] += 1
+		}
+	}
+	
+	//SANITY DECAY/REGEN---------------------------------------
+	if jdaction != 6 && jdaction != 16{
+		_multtemp = (jdtemp < 93)*5 //low body temperature can make people lose it
+		_multroom = (roomtemp <= 32)*1.2
+		_multsleep = (jdenergy < 25)*1.5
+		_multhunger = (jdhunger < 40)*1.7 + (jdthirst < 30)*1.3
+		_sanitymultiplier = _multtemp + _multroom + _multsleep + _multhunger
+		//If one aspect is thrown off, sanity takes a big dip.
+		//It is also harsher depending on difficulty.
+		jdsanity -= .01 * _sanitymultiplier * difficulty
+		
+		//If everything is going well, sanity will slowly regen.
+		//Injury lowers the maximum sanity they can acheive. 
+		if jdsanity < jddamage && _sanitymultiplier == 0 && jdtemp > 95 && jdenergy > 50 && jdhunger > 45{
+			jdsanity += .11
+		}
+		
+		if jdsanity < 0{
+			jdsanity = 0
+		}
+		
+	}
+}
+
+OnEnergyDecay{
+	case difficulty{
+		//medium
+		when 2{
+			jdenergy -= .125
+		}
+		//hard
+		when 3{
+			jdenergy -= .3125
+		}
+		//easy
+		others{
+			jdenergy -= .0625
+		}
+	}
+}
+
+//FOOD/WATER LOGIC--------------------------------------------------
+OnHungerDecay{
+	//Decrease the value of hunger and thirst as time passes based on difficulty level
+	case difficulty{
+		//medium
+		when 2{
+			jdhunger -= .0463
+			jdthirst -= .0007
+		}
+		//hard
+		when 3{
+			jdhunger -= .06944
+			jdthirst -= .0008
+		}
+		//easy
+		others{
+			jdhunger -= .02315
+			jdthirst -= .0006
+		}
+	}
+}
+
+//POWER LOGIC--------------------------------------------------
+OnMinutePower{
+	_mult = _argv[0]
+	
+	//it only doesn't go down while JD is turning the wheel
+	if jdaction != 9 && powerpercent > 0{
+		powerpercent -= .2 * (difficulty)
+	}elseif powerpercent < 100 {
+		powerpercent += .5 * (4-difficulty)
+		powergenerated += .5 * (4-difficulty)
+		if powerpercent > 100{
+			powerpercent = 100
+		}
+	}
+	
+	//Boolean that controls stagnant visuals
+	if powerpercent < 1 {
+		powerout = 1
+		powerdied = 1
+	}elseif powerdied == 1 && powerpercent >= 5{
+		powerout = 0
+		powerdied = 0
+	}else{
+		powerout = 0
+	}
+	
+
+}
+	
+//JD ACTION LOGIC----------------------------------------------
+OnMinuteAction{
+	_mult = _argv[0]
+	
+	
+	case jdaction{
+		//about to leave
+		when 5{
+			if jdinventory[2] <= 0 && jdthirst < 25{
+				jdaction = 11
+			}else{
+				DialogueLeave
+				jdaction = 10
+				timeleftoutside = RAND(60) + (30 * difficulty) - _mult
+				//in time fast-forwarding they could have left and returned
+				if timeleftoutside <= -1{
+					timeleftoutside = 0
+				}
+			}
+			
+		//asleep
+		}when 3{
+			
+			//will only wake up if rested, super hungry, or freezing
+			
+			if jdenergy < 10{		//tired enough won't wake up at all
+				
+				//check for death
+				if jdtemp <= 70 || jdhunger < 0{
+					//JD has frozen/starved to death.
+					jdaction = 6
+				}
+			
+			}elseif jdenergy < 60{ 	//JD is pretty tired, won't wake up too easy
+				if jdhunger <= 5{
+					if jdinventory[0] > 0 {
+						DialogueHungerWakeBeans
+						jdaction = 2
+					}else{
+						DialogueHungerSleepPains
+					}
+				}
+				
+				if roomtemp < 40{
+					DialogueWakeTemp
+					//The wheel is off, so they'll fix that.
+					jdaction = 9
+				}
+			
+			
+			}else{ 					//JD is rested enough to be fairly sensitive to changes
+				if jdhunger < 15{
+					if jdinventory[0] > 0 {
+						DialogueHungerWakeBeans
+						jdaction = 2
+					}else{
+						DialogueHungerSleepPains
+					}
+				}elseif jdthirst <= 20{
+					//time to go get a drink
+					if jdinventory[2] > 0 {
+						DialogueThirstWakeWater
+						jdaction = 2
+					}else{
+					//if JD needs water and has none, they'll go get some
+						jdaction = 5
+						DialogueThirstWakeWater
+					}
+					
+				}elseif roomtemp <= 50{
+					DialogueWakeTemp
+					//The wheel is off, so they'll fix that.
+					jdaction = 9
+				}elseif jdenergy > 99{
+					//eat breakfast
+					if jdhunger < 90{
+						jdaction = 2
+					}else{
+						//if they're reaaaallly not hungry, turn the wheel
+						jdaction = 9
+					}
+				}
+			}
+			//jdenergy += .19
+		
+		//dead
+		}when 6 , 16{
+			//they are dead.
+		}
+		//adventuring
+		when 10{
+			//if ventured out for long enough
+			if timeleftoutside == 0{
+				
+				//Resource Rewards
+				_beanspoils = RAND(4)-difficulty+1
+				_handspoils = RAND(4)-difficulty+2 //no matter what, they should get at least 1 handwarmer
+				if _beanspoils < 0{
+					_beanspoils = 0
+				}
+				jdinventory[0]+=_beanspoils
+				foodgathered+=_beanspoils
+				
+				jdinventory[3]+=_handspoils
+				
+				//JD's comment
+				jdaction = 4
+				DialogueReturn(_beanspoils)
+				
+				timeleftoutside = -1 //set them to inside
+				adventureshad++
+			}else{
+				timeleftoutside-=_mult
+				if timeleftoutside <= -1{
+					timeleftoutside = 0
+				}
+			}
+			
+			OnCheckIfDead
+		}
+		when 11{
+			//they just grabbed some water rq
+			jdaction = 4
+		}
+		//otherwise (not leaving, asleep, dead, or adventuring)
+		others{
+		
+			//exit conditions
+			if jdaction == 2{
+				//When JD is eating, they will continue unless something is urgent.
+				
+				if jdinventory[0] <= 0 && jdhunger <= 25{
+					//if JD needs food, but doesn't have enough energy to manage the trip
+					if jdenergy < 15{
+						DialogueNoFoodNoEnergy
+						jdaction = 3
+					}else{
+						//if JD is hungry enough to not bother with worrying about the warmth of the bunker, and will leave
+						jdaction = 5
+					}
+				}elseif jdinventory[2] <= 0 && jdthirst <= 20{
+					//if JD needs water and has none, they'll go get some
+					jdaction = 5
+					
+				}
+				elseif powerpercent < 30{ //power is the priority
+					jdaction = 9
+				}elseif jdhunger < 60 && jdinventory[0] > 0{ //next priorty is food
+					jdaction = 2
+				}elseif jdenergy < 10{ //then sleep
+					jdaction = 3
+				}elseif powerpercent < 80{ //prioritize energy overall
+					jdaction = 9
+				}elseif jdenergy < 30{ //next priorty is sleep
+					jdaction = 3 
+				}elseif jdhunger < 99 && jdinventory[0] > 0{ //then food again
+					jdaction = 2
+				}elseif jdtemp > 95{
+					//if nothing else fits and they're warm, go on an adventure
+					jdaction = 5
+				
+				}else{
+					jdaction = 3 //they lie in bed if there's nothing else to do
+				}
+			}elseif jdaction == 9{
+				//When JD is already turning the wheel, they will continue unless something else is more urgent.
+				
+				if jdinventory[0] <= 0 && jdhunger <= 25{
+					//if JD needs food, but doesn't have enough energy to manage the trip
+					if jdenergy < 15{
+						DialogueNoFoodNoEnergy
+						jdaction = 3
+					}else{
+						//if JD is hungry enough to not bother with worrying about the warmth of the bunker, and will leave
+						jdaction = 5
+					}
+				}elseif jdinventory[2] <= 0 && jdthirst <= 20{
+					//if JD needs water and has none, they'll go get some
+					jdaction = 5
+					
+				}
+				elseif powerpercent < 50{ //power is the priority
+					jdaction = 9
+				}elseif jdhunger < 20 && jdinventory[0] > 0{ //next priorty is food/water
+					jdaction = 2
+				}elseif jdenergy < 15{ //then sleep
+					jdaction = 3
+				}elseif powerpercent < 100{ //prioritize energy overall
+					jdaction = 9
+				}elseif jdenergy < 30{ //next priorty is sleep
+					jdaction = 3 
+				}elseif (jdhunger < 40 && jdinventory[0] > 0) || (jdthirst < 40 && jdinventory[2] > 0){ //then food/water again
+					jdaction = 2
+				}elseif jdtemp > 95{
+					//if nothing else fits and they're warm, go on an adventure
+					jdaction = 5
+				
+				}else{
+					jdaction = 3 //they lie in bed if there's nothing else to do
+				}
+			}else{
+				//When JD doesn't have an action.
+				if jdinventory[0] <= 0 && jdhunger <= 25{
+					//if JD needs food, but doesn't have enough energy to manage the trip
+					if jdenergy < 15{
+						DialogueNoFoodNoEnergy
+						jdaction = 3
+					}else{
+						//if JD is hungry enough to not bother with worrying about the warmth of the bunker, and will leave
+						jdaction = 5
+					}
+				}elseif jdinventory[2] <= 0 && jdthirst <= 20{
+					//if JD needs water and has none, they'll go get some
+					jdaction = 5
+					
+				}
+				elseif powerpercent < 50{ //power is the priority
+					jdaction = 9
+				}elseif (jdhunger < 20 && jdinventory[0] > 0) || (jdthirst < 20 && jdinventory[2] > 0){ //next priorty is food/water
+					jdaction = 2
+				}elseif jdenergy < 10{ //then sleep
+					jdaction = 3
+				}elseif powerpercent < 85{ //prioritize energy overall
+					jdaction = 9
+				}elseif jdenergy < 30{ //next priorty is sleep
+					jdaction = 3 
+				}elseif (jdhunger < 40 && jdinventory[0] > 0) || (jdthirst < 40 && jdinventory[2] > 0){ //then food/water again
+					jdaction = 2
+				}elseif jdtemp > 95{
+					//if nothing else fits and they're warm, go on an adventure
+					jdaction = 5
+				
+				}else{
+					jdaction = 3 //they lie in bed if there's nothing else to do
+				}
+			
+			}
+			
+			OnCheckIfDead
+			
+		}
+	}
+	
+}
+
+//Set death state variables if needed.
+OnCheckIfDead{
+	if jdtemp < 70 {
+		causeofdeath = "frozen"
+		if jdaction == 10{
+			jdaction = 16
+		}else{
+			jdaction = 6
+		}
+		CleanVariablesOnDeath
+	}elseif jdhunger <= 0{
+		causeofdeath = "starved"
+		if jdaction == 10{
+			jdaction = 16
+		}else{
+			jdaction = 6
+		}
+		CleanVariablesOnDeath
+	}elseif jdenergy <= 0{
+		causeofdeath = "worked"
+		if jdaction == 10{
+			jdaction = 16
+		}else{
+			jdaction = 6
+		}
+		CleanVariablesOnDeath
+	}elseif jdtemp < 75 && jdaction != 10{
+		//when they get cold enough they'll go to bed to die
+		jdaction = 3
+	}
+
+}
+
+CleanVariablesOnDeath{
+	jdsanity = 100
+	//jdhunger = 0
+	//jdenergy = 0
+}
+
+DockEnergy{
+	_mult = _argv[0]
+	if jdaction != 6; jdenergy -= _mult * .6
+}
+
+
+
+

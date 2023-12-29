@@ -1,0 +1,563 @@
+//Surfacing
+
+charset,Shift_JIS
+version,1
+option,DisableNoDefineSurfaces
+collsion-sort,descend
+
+
+sakura.cursor
+{
+	mouseup0,Crates,system:help
+	mouseup1,Ladder,system:help
+	mouseup2,Generator,system:help
+	mouseup3,JD,system:hand
+	mousedown4,JD,system:grip
+	mouseup5,Wheel,system:grip
+
+}
+
+
+
+surface0
+{
+// This is the 'thumbnail' image. It is left as a composite image, instead of split into parts like the ghost is when functioning.
+}
+
+//warm
+surface1000{
+
+	//THE BUNKER------------------------------------------------------------------------
+	//base
+	animation100.interval,runonce
+	animation100.pattern0,overlay,10000,0,0,0
+	
+	//base dark 
+	animation101.interval,never
+	animation101.pattern0,overlay,10010,0,0,0
+	
+	//base flicker
+	animation102.interval,never
+	animation102.pattern0,overlay,10010,0,0,0
+	animation102.pattern1,overlay,10000,130,0,0
+	animation102.pattern2,overlay,10010,1700,0,0
+	animation102.pattern3,overlay,10000,1000,0,0
+	
+	//horror flicker
+	animation107.interval,never
+	animation107.pattern0,overlay,10710,0,0,0
+	animation107.pattern1,overlay,10000,130,0,0
+	animation107.pattern2,overlay,10710,1700,0,0
+	animation107.pattern3,overlay,10000,1000,0,0
+
+}
+
+//chilly
+surface1010{
+
+	//THE BUNKER------------------------------------------------------------------------
+	//base
+	animation100.interval,runonce
+	animation100.pattern0,overlay,10100,0,0,0
+	
+	//base dark 
+	animation101.interval,never
+	animation101.pattern0,overlay,10110,0,0,0
+	
+	//base flicker
+	animation102.interval,never
+	animation102.pattern0,overlay,10110,0,0,0
+	animation102.pattern1,overlay,10100,130,0,0
+	animation102.pattern2,overlay,10110,1700,0,0
+	animation102.pattern3,overlay,10100,1000,0,0
+	
+	//horror flicker
+	animation107.interval,never
+	animation107.pattern0,overlay,10710,0,0,0
+	animation107.pattern1,overlay,10100,130,0,0
+	animation107.pattern2,overlay,10710,1700,0,0
+	animation107.pattern3,overlay,10100,1000,0,0
+
+}
+
+//frozen
+surface1030{
+
+	//THE BUNKER------------------------------------------------------------------------
+	//base
+	animation100.interval,runonce
+	animation100.pattern0,overlay,10300,0,0,0
+	
+	//base dark 
+	animation101.interval,never
+	animation101.pattern0,overlay,10310,0,0,0
+	
+	//base flicker
+	animation102.interval,never
+	animation102.pattern0,overlay,10310,0,0,0
+	animation102.pattern1,overlay,10300,130,0,0
+	animation102.pattern2,overlay,10310,1700,0,0
+	animation102.pattern3,overlay,10300,1000,0,0
+	
+	//horror flicker
+	animation107.interval,never
+	animation107.pattern0,overlay,10710,0,0,0
+	animation107.pattern1,overlay,10300,130,0,0
+	animation107.pattern2,overlay,10710,1700,0,0
+	animation107.pattern3,overlay,10300,1000,0,0
+
+}
+
+//frozen BAD
+surface1050{
+
+	//THE BUNKER------------------------------------------------------------------------
+	//base
+	animation100.interval,runonce
+	animation100.pattern0,overlay,10500,0,0,0
+	
+	//base dark 
+	animation101.interval,never
+	animation101.pattern0,overlay,10510,0,0,0
+	
+	//base flicker
+	animation102.interval,never
+	animation102.pattern0,overlay,10510,0,0,0
+	animation102.pattern1,overlay,10500,130,0,0
+	animation102.pattern2,overlay,10510,1700,0,0
+	animation102.pattern3,overlay,10500,1000,0,0
+	
+	//horror flicker
+	animation107.interval,never
+	animation107.pattern0,overlay,10750,0,0,0
+	animation107.pattern1,overlay,10500,130,0,0
+	animation107.pattern2,overlay,10750,1700,0,0
+	animation107.pattern3,overlay,10500,1000,0,0
+
+}
+
+
+
+surface.append1000-4999{
+	
+	//generator full power 6/6
+	animation186.interval,never
+	animation186.pattern0,overlay,18060,0,0,0
+	
+	//generator power 5/6
+	animation185.interval,never
+	animation185.pattern0,overlay,18050,0,0,0
+	
+	//generator power 4/6
+	animation184.interval,never
+	animation184.pattern0,overlay,18040,0,0,0
+	
+	//generator power 3/6
+	animation183.interval,never
+	animation183.pattern0,overlay,18030,0,0,0
+	
+	//generator power 2/6
+	animation182.interval,never
+	animation182.pattern0,overlay,18020,0,0,0
+	
+	//generator power 1/6
+	animation181.interval,never
+	animation181.pattern0,overlay,18010,0,0,0
+	
+	//JD at the wheel - warm-----------------------------
+	animation190.interval,never
+	animation190.pattern0,parallelstart,(335,490)
+	animation190.pattern1,overlay,19000,0,0,0
+	
+	//JD at the wheel - warm dark
+	animation191.interval,never
+	animation191.pattern0,parallelstart,(336,491)
+	animation191.pattern1,overlay,19010,0,0,0
+	
+	//JD at the wheel - warm flicker
+	animation192.interval,never
+	animation192.pattern0,parallelstart,(337,492)
+	animation192.pattern1,overlay,19010,0,0,0
+	animation192.pattern2,overlay,19000,130,0,0
+	animation192.pattern3,overlay,19010,1700,0,0
+	animation192.pattern4,overlay,19000,1000,0,0
+	
+	//JD at the wheel - cold-----------------------------
+	animation195.interval,never
+	animation195.pattern0,parallelstart,(345,590)
+	animation195.pattern1,overlay,19100,0,0,0
+	
+	//JD at the wheel - cold dark
+	animation196.interval,never
+	animation196.pattern0,parallelstart,(346,591)
+	animation196.pattern1,overlay,19110,0,0,0
+	
+	//JD at the wheel - cold flicker
+	animation197.interval,never
+	animation197.pattern0,parallelstart,(347,592)
+	animation197.pattern1,overlay,19110,0,0,0
+	animation197.pattern2,overlay,19100,130,0,0
+	animation197.pattern3,overlay,19110,1700,0,0
+	animation197.pattern4,overlay,19100,1000,0,0
+	
+	
+	//Layering Parts that Break The Mold-------------------------------------------------
+	//wheel
+	animation330.interval,never
+	animation330.pattern0,overlay,33000,0,0,0
+	
+	//wheel dark
+	animation331.interval,never
+	animation331.pattern0,overlay,33100,0,0,0
+	
+	//wheel flicker
+	animation332.interval,never
+	animation332.pattern0,overlay,33100,0,0,0
+	animation332.pattern1,overlay,33000,130,0,0
+	animation332.pattern2,overlay,33100,1700,0,0
+	animation332.pattern3,overlay,33000,1000,0,0
+	
+	//wheel moving
+	animation335.interval,never
+	animation335.pattern0,overlay,33000,0,0,0
+	animation335.pattern1,overlay,33001,333,0,0
+	animation335.pattern2,overlay,33002,333,0,0
+	animation335.pattern4,overlay,33000,333,0,0
+	animation335.pattern5,start,335
+	
+	//wheel moving dark
+	animation336.interval,never
+	animation336.pattern0,overlay,33100,0,0,0
+	animation336.pattern1,overlay,33101,333,0,0
+	animation336.pattern2,overlay,33102,333,0,0
+	animation336.pattern4,overlay,33100,333,0,0
+	animation336.pattern5,start,336
+	
+	//wheel moving flicker
+	animation337.interval,never
+	animation337.pattern0,overlay,33100,0,0,0
+	animation337.pattern1,overlay,33001,130,0,0
+	animation337.pattern2,overlay,33002,400,0,0
+	animation337.pattern3,overlay,33000,400,0,0
+	animation337.pattern4,overlay,33001,400,0,0
+	animation337.pattern5,overlay,33002,300,0,0
+	animation337.pattern6,overlay,33100,200,0,0
+	animation337.pattern7,overlay,33101,200,0,0
+	animation337.pattern8,overlay,33102,200,0,0
+	animation337.pattern9,overlay,33100,200,0,0
+	animation337.pattern10,overlay,33101,200,0,0
+	animation337.pattern11,overlay,-1,200,0,0
+	animation337.pattern12,start,335
+	
+	//wheel
+	animation340.interval,never
+	animation340.pattern0,overlay,34000,0,0,0
+	
+	//wheel dark
+	animation341.interval,never
+	animation341.pattern0,overlay,34100,0,0,0
+	
+	//wheel flicker
+	animation342.interval,never
+	animation342.pattern0,overlay,34100,0,0,0
+	animation342.pattern1,overlay,34000,130,0,0
+	animation342.pattern2,overlay,34100,1700,0,0
+	animation342.pattern3,overlay,34000,1000,0,0
+	
+	//wheel moving
+	animation345.interval,never
+	animation345.pattern0,overlay,34000,0,0,0
+	animation345.pattern1,overlay,34001,333,0,0
+	animation345.pattern2,overlay,34002,333,0,0
+	animation345.pattern4,overlay,34000,333,0,0
+	animation345.pattern5,start,345
+	
+	//wheel moving dark
+	animation346.interval,never
+	animation346.pattern0,overlay,34100,0,0,0
+	animation346.pattern1,overlay,34101,333,0,0
+	animation346.pattern2,overlay,34102,333,0,0
+	animation346.pattern4,overlay,34100,333,0,0
+	animation346.pattern5,start,346
+	
+	//wheel moving flicker
+	animation347.interval,never
+	animation347.pattern0,overlay,34100,0,0,0
+	animation347.pattern1,overlay,34001,130,0,0
+	animation347.pattern2,overlay,34002,400,0,0
+	animation347.pattern3,overlay,34000,400,0,0
+	animation347.pattern4,overlay,34001,400,0,0
+	animation347.pattern5,overlay,34002,300,0,0
+	animation347.pattern6,overlay,34100,200,0,0
+	animation347.pattern7,overlay,34101,200,0,0
+	animation347.pattern8,overlay,34102,200,0,0
+	animation347.pattern9,overlay,34100,200,0,0
+	animation347.pattern10,overlay,34101,200,0,0
+	animation347.pattern11,overlay,-1,200,0,0
+	animation347.pattern12,start,345
+	
+	
+	//WARM JD----------------------------------------------------------------------------
+	//eating on bed
+	animation420.interval,never
+	animation420.collisionex42,JD,polygon,106,187,127,187,148,203,158,231,140,233,136,227,123,235,103,221,95,205
+	animation420.pattern0,overlay,42000,0,0,0
+	animation420.pattern1,overlay,42001,500,0,0
+	animation420.pattern2,overlay,42000,500,0,0
+	animation420.pattern3,start,420
+	
+	//eating on bed dark
+	animation421.interval,never
+	animation421.collisionex42,JD,polygon,106,187,127,187,148,203,158,231,140,233,136,227,123,235,103,221,95,205
+	animation421.pattern0,overlay,42010,0,0,0
+	animation421.pattern1,overlay,42011,500,0,0
+	animation421.pattern2,overlay,42010,500,0,0
+	animation421.pattern3,start,421
+	
+	//eating on bed flicker
+	animation422.interval,never
+	animation422.collisionex42,JD,polygon,106,187,127,187,148,203,158,231,140,233,136,227,123,235,103,221,95,205
+	animation422.pattern0,overlay,42010,0,0,0
+	animation422.pattern1,overlay,42000,130,0,0
+	animation422.pattern2,overlay,42001,900,0,0
+	animation422.pattern3,overlay,42010,800,0,0
+	animation422.pattern4,overlay,42011,500,0,0
+	animation422.pattern5,overlay,42000,500,0,0
+	animation422.pattern6,overlay,-1,0,0,0
+	animation422.pattern7,start,420
+	
+	//sleeping
+	animation430.interval,never
+	animation430.pattern0,overlay,43000,0,0,0
+	animation430.collisionex43,JD,polygon,53,198,87,199,104,219,101,235,67,238,52,212
+	
+	//sleeping dark
+	animation431.interval,never
+	animation431.pattern0,overlay,43010,0,0,0
+	animation431.collisionex43,JD,polygon,53,198,87,199,104,219,101,235,67,238,52,212
+	
+	//sleeping flicker
+	animation432.interval,never
+	animation432.pattern0,overlay,43010,0,0,0
+	animation432.pattern1,overlay,43000,130,0,0
+	animation432.pattern2,overlay,43010,1700,0,0
+	animation432.pattern3,overlay,43000,1000,0,0
+	animation432.collisionex43,JD,polygon,53,198,87,199,104,219,101,235,67,238,52,212
+	
+	//ladder
+	animation450.interval,never
+	animation450.pattern0,overlay,45000,0,0,0
+	animation450.collisionex45,JD,polygon,165,47,200,44,198,64,182,77,199,95,185,124,187,138,162,144,157,92,154,52
+	
+	//ladder dark
+	animation451.interval,never
+	animation451.collisionex45,JD,polygon,165,47,200,44,198,64,182,77,199,95,185,124,187,138,162,144,157,92,154,52
+	animation451.pattern0,overlay,45010,0,0,0
+	
+	//ladder flicker
+	animation452.interval,never
+	animation452.collisionex45,JD,polygon,165,47,200,44,198,64,182,77,199,95,185,124,187,138,162,144,157,92,154,52
+	animation452.pattern0,overlay,45010,0,0,0
+	animation452.pattern1,overlay,45000,130,0,0
+	animation452.pattern2,overlay,45010,1700,0,0
+	animation452.pattern3,overlay,45000,1000,0,0
+	
+	//JD dead
+	animation460.interval,never
+	animation460.collisionex43,JD,polygon,53,198,87,199,104,219,101,235,67,238,52,212
+	animation460.pattern0,overlay,43600,0,0,0
+	
+	//JD dead dark
+	animation461.interval,never
+	animation461.collisionex43,JD,polygon,53,198,87,199,104,219,101,235,67,238,52,212
+	animation461.pattern0,overlay,43610,0,0,0
+	
+	//JD dead flicker
+	animation462.interval,never
+	animation462.collisionex43,JD,polygon,53,198,87,199,104,219,101,235,67,238,52,212
+	animation462.pattern0,overlay,43610,0,0,0
+	animation462.pattern1,overlay,43600,130,0,0
+	animation462.pattern2,overlay,43610,1700,0,0
+	animation462.pattern3,overlay,43600,1000,0,0
+	
+	//turning wheel
+	animation490.interval,never
+	animation490.pattern0,overlay,49000,0,0,0
+	animation490.pattern1,overlay,49001,333,0,0
+	animation490.pattern2,overlay,49000,666,0,0
+	animation490.pattern3,start,490
+	animation490.collisionex49,JD,polygon,153,196,167,198,182,229,179,252,172,271,157,271,153,251,121,255,117,240,141,234,150,218
+	
+	//turning wheel dark
+	animation491.interval,never
+	animation491.collisionex49,JD,polygon,153,196,167,198,182,229,179,252,172,271,157,271,153,251,121,255,117,240,141,234,150,218
+	animation491.pattern0,overlay,49010,0,0,0
+	animation491.pattern1,overlay,49011,333,0,0
+	animation491.pattern2,overlay,49010,666,0,0
+	animation491.pattern3,start,491
+	
+	//turning wheel flicker
+	animation492.interval,never
+	animation492.collisionex49,JD,polygon,153,196,167,198,182,229,179,252,172,271,157,271,153,251,121,255,117,240,141,234,150,218
+	animation492.pattern0,overlay,49010,0,0,0
+	animation492.pattern1,overlay,49001,130,0,0
+	animation492.pattern2,overlay,49000,400,0,0
+	animation492.pattern3,overlay,49000,400,0,0
+	animation492.pattern4,overlay,49001,400,0,0
+	animation492.pattern5,overlay,49001,300,0,0
+	animation492.pattern6,overlay,49010,200,0,0
+	animation492.pattern7,overlay,49010,200,0,0
+	animation492.pattern8,overlay,49011,200,0,0
+	animation492.pattern9,overlay,49011,200,0,0
+	animation492.pattern10,overlay,49010,200,0,0
+	animation492.pattern11,overlay,-1,200,0,0
+	animation492.pattern12,start,490
+	
+	//COLD JD----------------------------------------------------------------------------
+	//eating on bed
+	animation520.interval,never
+	animation520.collisionex42,JD,polygon,106,187,127,187,148,203,158,231,140,233,136,227,123,235,103,221,95,205
+	animation520.pattern0,overlay,42100,0,0,0
+	animation520.pattern1,overlay,42101,500,0,0
+	animation520.pattern2,overlay,42100,500,0,0
+	animation520.pattern3,start,520
+	
+	//eating on bed dark
+	animation521.interval,never
+	animation521.collisionex42,JD,polygon,106,187,127,187,148,203,158,231,140,233,136,227,123,235,103,221,95,205
+	animation521.pattern0,overlay,42110,0,0,0
+	animation521.pattern1,overlay,42111,500,0,0
+	animation521.pattern2,overlay,42110,500,0,0
+	animation521.pattern3,start,521
+	
+	//eating on bed flicker
+	animation522.interval,never
+	animation522.collisionex42,JD,polygon,106,187,127,187,148,203,158,231,140,233,136,227,123,235,103,221,95,205
+	animation522.pattern0,overlay,42110,0,0,0
+	animation522.pattern1,overlay,42100,130,0,0
+	animation522.pattern2,overlay,42101,900,0,0
+	animation522.pattern3,overlay,42110,800,0,0
+	animation522.pattern4,overlay,42111,500,0,0
+	animation522.pattern5,overlay,42100,500,0,0
+	animation522.pattern6,overlay,-1,0,0,0
+	animation522.pattern7,start,520
+	
+	//sleeping
+	animation530.interval,never
+	animation530.pattern0,overlay,43100,0,0,0
+	animation530.collisionex43,JD,polygon,53,198,87,199,104,219,101,235,67,238,52,212
+	
+	//sleeping dark
+	animation531.interval,never
+	animation531.pattern0,overlay,43110,0,0,0
+	animation531.collisionex43,JD,polygon,53,198,87,199,104,219,101,235,67,238,52,212
+	
+	//sleeping flicker
+	animation532.interval,never
+	animation532.pattern0,overlay,43110,0,0,0
+	animation532.pattern1,overlay,43100,130,0,0
+	animation532.pattern2,overlay,43110,1700,0,0
+	animation532.pattern3,overlay,43100,1000,0,0
+	animation532.collisionex43,JD,polygon,53,198,87,199,104,219,101,235,67,238,52,212
+	
+	//ladder
+	animation550.interval,never
+	animation550.pattern0,overlay,45100,0,0,0
+	animation550.collisionex45,JD,polygon,165,47,200,44,198,64,182,77,199,95,185,124,187,138,162,144,157,92,154,52
+	
+	//ladder dark
+	animation551.interval,never
+	animation551.collisionex45,JD,polygon,165,47,200,44,198,64,182,77,199,95,185,124,187,138,162,144,157,92,154,52
+	animation551.pattern0,overlay,45110,0,0,0
+	
+	//ladder flicker
+	animation552.interval,never
+	animation552.collisionex45,JD,polygon,165,47,200,44,198,64,182,77,199,95,185,124,187,138,162,144,157,92,154,52
+	animation552.pattern0,overlay,45110,0,0,0
+	animation552.pattern1,overlay,45100,130,0,0
+	animation552.pattern2,overlay,45110,1700,0,0
+	animation552.pattern3,overlay,45100,1000,0,0
+	
+	//JD dead
+	animation560.interval,never
+	animation560.collisionex43,JD,polygon,53,198,87,199,104,219,101,235,67,238,52,212
+	animation560.pattern0,overlay,43700,0,0,0
+	
+	//JD dead dark
+	animation561.interval,never
+	animation561.collisionex43,JD,polygon,53,198,87,199,104,219,101,235,67,238,52,212
+	animation561.pattern0,overlay,43710,0,0,0
+	
+	//JD dead flicker
+	animation562.interval,never
+	animation562.collisionex43,JD,polygon,53,198,87,199,104,219,101,235,67,238,52,212
+	animation562.pattern0,overlay,43710,0,0,0
+	animation562.pattern1,overlay,43700,130,0,0
+	animation562.pattern2,overlay,43710,1700,0,0
+	animation562.pattern3,overlay,43700,1000,0,0
+	
+	//turning wheel
+	animation590.interval,never
+	animation590.collisionex49,JD,polygon,153,196,167,198,182,229,179,252,172,271,157,271,153,251,121,255,117,240,141,234,150,218
+	animation590.pattern0,overlay,49100,0,0,0
+	animation590.pattern1,overlay,49101,333,0,0
+	animation590.pattern2,overlay,49100,666,0,0
+	animation590.pattern3,start,590
+	
+	//turning wheel dark
+	animation591.interval,never
+	animation591.collisionex49,JD,polygon,153,196,167,198,182,229,179,252,172,271,157,271,153,251,121,255,117,240,141,234,150,218
+	animation591.pattern0,overlay,49110,0,0,0
+	animation591.pattern1,overlay,49111,333,0,0
+	animation591.pattern2,overlay,49110,666,0,0
+	animation591.pattern3,start,591
+	
+	//turning wheel flicker
+	animation592.interval,never
+	animation592.collisionex49,JD,polygon,153,196,167,198,182,229,179,252,172,271,157,271,153,251,121,255,117,240,141,234,150,218
+	animation592.pattern0,overlay,49110,0,0,0
+	animation592.pattern1,overlay,49101,130,0,0
+	animation592.pattern2,overlay,49100,400,0,0
+	animation592.pattern3,overlay,49100,400,0,0
+	animation592.pattern4,overlay,49101,400,0,0
+	animation592.pattern5,overlay,49101,300,0,0
+	animation592.pattern6,overlay,49110,200,0,0
+	animation592.pattern7,overlay,49110,200,0,0
+	animation592.pattern8,overlay,49111,200,0,0
+	animation592.pattern9,overlay,49111,200,0,0
+	animation592.pattern10,overlay,49110,200,0,0
+	animation592.pattern11,overlay,-1,200,0,0
+	animation592.pattern12,start,590
+	
+	
+	//Object coordinates	
+	//wheel
+	collisionex33,Wheel,polygon,154,227,134,233,128,251,148,275,180,262,174,238
+	
+	//generator
+	collisionex17,Generator,polygon,198,123,174,145,161,200,224,237,270,210,271,163,254,152,246,155
+	
+	//ladder
+	collisionex15,Ladder,polygon,150,181,180,28,213,45,185,193
+	
+	//crates
+	collisionex10,Crates,polygon,185,121,138,88,95,111,94,132,69,149,70,187,103,203,182,159
+	
+	//sleep
+	//collisionex43,JD,polygon,53,198,87,199,104,219,101,235,67,238,52,212
+	//food
+	//collisionex10,JD,polygon,106,187,127,187,148,203,158,231,140,233,136,227,123,235,103,221,95,205
+
+	//wheel
+	//collisionex10,JD,polygon,153,196,167,198,182,229,179,252,172,271,157,271,153,251,121,255,117,240,141,234,150,218
+
+	//ladder
+	//collisionex10,JD,polygon,165,47,200,44,198,64,182,77,199,95,185,124,187,138,162,144,157,92,154,52
+
+	
+	
+	
+}
+
+
+

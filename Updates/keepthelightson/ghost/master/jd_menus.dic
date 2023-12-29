@@ -1,0 +1,330 @@
+//---------------------------------------------------------
+// Menus
+//---------------------------------------------------------
+
+
+
+MouseDoubleClick_0Generator{
+
+	"\![set,autoscroll,disable]\_q%(jdbase)"
+	--
+	"\f[align,center]-------------POWER-------------\n"
+	--
+	_minutes = 0
+	_minutes = TOINT(powerpercent / (.2 * (difficulty)))
+	if powerpercent <=0{
+		"%(nrto)There is no power left to run the generator.%(nrtc)\n\n[half]"
+	}elseif _minutes != 1{
+		"Power: %(SHORTFORM(powerpercent))%\n%(nrto)You have %_minutes minutes until the power goes out.%(nrtc)\n\n[half]"
+	}else{
+		"Power: %(SHORTFORM(powerpercent))%\n%(nrto)You have %_minutes minute until the power goes out.%(nrtc)\n\n[half]"
+	}
+	--
+	"---------TEMPERATURE---------\nInside: %(TEMPFORM(roomtemp))\nOutside: %(TEMPFORM(outsidetemp))\n\n[half]"
+	--
+	"-------------CONFIG-------------\nDifficulty: "
+	--
+	case difficulty{
+		//medium
+		when 2{
+			"Life"
+		}
+		//hard
+		when 3{
+			"Nightmare"
+		}
+		//easy
+		others{
+			"Dream"
+		}
+	}
+
+	//"Power: \nBeans: %beans\nEnergy: %jdenergy%\nRoom Temp: %roomtemp\nHunger: %jdhunger%\nSanity: %jdsanity%"
+
+}
+
+MouseDoubleClick_0Ladder{
+
+	"\b2\![set,autoscroll,disable]\_q\f[align,center]"
+	--
+	if jdaction == 11{
+		"%(nrto)JD is shoving snow into a water bottle right now.%(nrtc)\n\n[half]"
+	}elseif timeleftoutside > -1{
+		//If JD died outside.
+		if causeofdeath != ""{
+			"%(nrto)JD will return in ??? minutes.%(nrtc)\n\n[half]"
+			"%(nrto)Maybe JD won't be returning...%(nrtc)\n\n[half]"
+		}else{
+			if timeleftoutside == 0{
+				"%(nrto)JD is at the bunker door.%(nrtc)\n\n[half]"
+			}elseif timeleftoutside != 1{
+				"%(nrto)JD will return in %timeleftoutside minutes.%(nrtc)\n\n[half]"
+			}else{
+				"%(nrto)JD will return in a minute.%(nrtc)\n\n[half]"
+			}
+		}
+		
+	}else{
+		if jdaction == 6{
+			"%(nrto)JD has %causeofdeath to death.%(nrtc)\n\n[half]"
+		}
+		--
+		"------------VITALS------------\n"
+		--
+		"Fullness: %(SHORTFORM(jdhunger))%\nHydration: %(SHORTFORM(jdthirst))%\nEnergy: %(SHORTFORM(jdenergy))%\nBody Temperature: %(TEMPFORM(jdtemp))\nSanity: %(SHORTFORM(jdsanity))%"
+	}
+	--
+	"\n\n[half]-------------STATS------------\n"
+	--
+	"Journeys Taken: %adventureshad\nFood Gathered: %foodgathered\nPower Generated: %(SHORTFORM(powergenerated))\nPower Hand Generated: %(SHORTFORM(powerhandgenerated))\nTimes Touched: %timestouched\n"
+	--
+	if timeslept != 1{
+		"Time Asleep: %timeslept minutes\n"
+	}else{
+		"Time Asleep: %timeslept minute\n"
+	}
+	--
+	if timessanitydropped > 0{
+		if timessanitydropped == 1; "Sanity dropped to 0 %timessanitydropped times."
+		else; "Sanity dropped to 0 only once."
+	}
+		--
+	"\n\n[half]\_a[OnConfigMenu]Config\_a"
+	
+
+}
+
+
+MouseDoubleClick_0Crates : all{
+	"\![set,autoscroll,disable]\_q%(nrto)JD has: \n\n[half]"
+	--
+	for _i = 0; _i < ARRAYSIZE(inventorysingular); _i++{
+		_shortver = SUBSTR(TOSTR(jdinventory[_i]),0,3)
+		if _i == ARRAYSIZE(inventorysingular)-1{
+			"and "
+			if _shortver == 1 || _shortver == 1.0{
+				"%_shortver %inventorysingular[_i]."
+			}else{
+				"%_shortver %inventoryplural[_i]."
+			}
+		}
+		elseif _shortver == 1 || _shortver == 1.0{
+			"%_shortver %inventorysingular[_i],\n"
+		}elseif _shortver != 0{
+			"%_shortver %inventoryplural[_i],\n"
+		}
+	}
+	--
+	if roomtemp < 30{
+		"\n\n[half]However, it's all too frozen to be usable. The room needs to warm up first."
+	}
+	--
+	"%(nrtc)"
+}
+
+inventorysingular : array{
+	"can of beans"
+	"can of tuna"
+	"water bottle"
+	"handwarmer packet"
+	"use of thread"
+	"cloth scrap"
+	"day's worth of estrogen"
+}
+
+inventoryplural : array{
+	"cans of beans"
+	"cans of tuna"
+	"bottles of water"
+	"chemical handwarmers"
+	"uses of thread"
+	"cloth scraps"
+	"day's worth of estrogen"
+}
+
+
+MouseDoubleClick_0JD{
+	if tutorialmode == 3{
+		"I'm hallucinating, huh? \w6I've gone mad. I can't.\w3.\w3. I can't go mad. \w4Only 47 days! \w4They just haven't found me yet, \w4I can't be, \w2I can't--\x"
+		--
+		"%(nrto)Scroll your mouse over them again to seep their energy.%(nrtc)\x"
+		tutorialmode = 4
+		
+	}
+	elseif jdaction == 6{
+		"%(nrto)They are dead.%(nrtc)"
+		"%(nrto)The corpse of something that once was.%(nrtc)"
+		"%(nrto)You wonder if their body will ever be discovered.%(nrtc)"
+	}else{
+		
+		if jdsanity < 60{
+			OpenJDMenu
+		}
+	}
+}
+
+OpenJDMenu{
+
+	if jdsanity > 40{
+		"%(jdbase)I'm going crazy. The hallucination wants something."
+		"%(nrto)JD looks upset.%(nrtc)\n\n[half]I'm listening."
+	}else{
+		"%(nrto)JD shudders.%(nrtc)\n\n[half]I'm crazy. I'm mad."
+		"Lady Spring?"
+		"Her Highness, Lady Death, beckons us all eventually."
+	}
+	--
+	"\![set,autoscroll,disable]\_q\n\n[half]"
+	--
+	if jdaction != 2{
+		"\![*]\__q[CommandEAT]Please eat, JD.\__q\n"
+	}
+	--
+	if jdaction != 5{
+		"\![*]\__q[CommandJOURNEY]Maybe you should go find supplies.\__q\n"
+	}
+	--
+	if jdaction != 9{
+		"\![*]\__q[CommandWHEEL]The power is getting low.\__q\n"
+	}
+	--
+	if jdaction != 3{
+		"\![*]\__q[CommandSLEEP]It's time to sleep.\__q\n"
+	}
+	//NOTE: the dialogues for these are located in aitalk!
+}
+
+
+
+OnConfigMenu{
+	"\![set,autoscroll,disable]\_q"
+	--
+	//username
+	if username != "" && username != "User"{
+		"Name: \_a[MenuCHANGENAME]%username\_a "
+	}else{
+		"\![*]\__q[MenuCHANGENAME]Set name\_a "
+	}
+	--
+	//font
+	"\nFont Height: \__q[MenuDOWNFONTHEIGHT]\![*]\__q%fontheight \__q[MenuUPFONTHEIGHT]\![*]\__q\n"
+	--
+	//sfx
+	"SFX Volume: \__q[MenuDOWNVOLUME]\![*]\__q%sfxvolume \__q[MenuUPVOLUME]\![*]\__q\n\n[half]"
+	--
+	//difficulty
+	"Temperature Format: "
+	--
+	case tempform{
+		when "F"{
+			"\f[underline,1]\_a[MenuSETTPF]Fahrenheit\f[underline,0]\_a      \_a[MenuSETTPC]Celsius\_a      \_a[MenuSETTPK]Kelvin\_a"
+		}
+		when "C"{
+			"\_a[MenuSETTPF]Fahrenheit\_a      \f[underline,1]\_a[MenuSETTPC]Celsius\_a\f[underline,0]      \_a[MenuSETTPK]Kelvin\_a"
+		}
+		when "K"{
+			"\_a[MenuSETTPF]Fahrenheit\_a      \_a[MenuSETTPC]Celsius\_a      \f[underline,1]\_a[MenuSETTPK]Kelvin\_a\f[underline,0]"
+		}
+	}	
+	--
+	//difficulty
+	"\n\n[half]Difficulty:   "
+	--
+	case difficulty{
+		when 1{
+			"\f[underline,1]\_a[MenuSETEASY]Dream\f[underline,0]\_a      \_a[MenuSETMEDIUM]Life\_a      \_a[MenuSETHARD]Nightmare\_a"
+		}
+		when 2{
+			"\_a[MenuSETEASY]Dream\_a      \f[underline,1]\_a[MenuSETMEDIUM]Life\_a\f[underline,0]      \_a[MenuSETHARD]Nightmare\_a"
+		}
+		when 3{
+			"\_a[MenuSETEASY]Dream\_a      \_a[MenuSETMEDIUM]Life\_a      \f[underline,1]\_a[MenuSETHARD]Nightmare\_a\f[underline,0]"
+		}
+	}	
+	--
+	//reset
+	"\n\n[half]\![*]\__q[MenuRESET]Reset?\_a"
+	
+
+}
+
+MenuCHANGENAME{
+	"%(nrto)Who are you?%(nrtc)\![open,inputbox,OnMenuNAMECHANGEFINISH,0]"
+}
+
+OnMenuNAMECHANGEFINISH{
+	username = reference[0]
+	"%(nrto)Take care, %username.%(nrtc)"
+}
+
+
+MenuUPFONTHEIGHT{
+	fontheight++
+	OnConfigMenu
+}
+
+MenuDOWNFONTHEIGHT{
+	fontheight--
+	OnConfigMenu
+}
+
+MenuUPVOLUME{
+	sfxvolume ++
+	OnConfigMenu
+}
+
+MenuDOWNVOLUME{
+	sfxvolume --
+	OnConfigMenu
+}
+
+MenuSETTPF{
+	tempform = "F"
+	OnConfigMenu
+}
+
+MenuSETTPC{
+	tempform = "C"
+	OnConfigMenu
+}
+
+MenuSETTPK{
+	tempform = "K"
+	OnConfigMenu
+}
+
+MenuSETEASY{
+	difficulty=1
+	"%(nrto)Now is a time for smooth coasting.%(nrtc)\n\n[half]"
+	--
+	OnConfigMenu
+}
+
+MenuSETMEDIUM{
+	difficulty=2
+	"%(nrto)When the wind blows and the snow drifts in, slowly, a moment is stretched and preserved.%(nrtc)\n\n[half]"
+	--
+	OnConfigMenu
+}
+
+MenuSETHARD{
+	difficulty=3
+	"%(nrto)The frost is ruthless. Bones as cold as ice, and an endless expanse of pure white snow, forever, and ever, alone and still.%(nrtc)\n\n[half]"
+	--
+	OnConfigMenu
+}
+
+MenuRESET{
+	"%(nrto)Are you sure you'd like to reset JD? There's no way to regain your progress.%(nrtc)\n\n[half]\_q"
+	--
+	"\![*]\_a[OnFirstBoot]Reset\_a \n"
+	--
+	"\![*]\_a[OnConfigMenu]Nevermind\_a "
+	
+}
+
+
+
+
+
+

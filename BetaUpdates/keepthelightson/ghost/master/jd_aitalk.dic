@@ -1,0 +1,318 @@
+
+//---------------------------------------------------------
+//random talk (optional)
+//---------------------------------------------------------
+/// Random talk frequency initial value is TALK_INTERVAL (in seconds) in yaya_shiori3.dic
+
+OnAITalk{
+	OnAiTalk
+}
+
+OnAiTalk
+{
+	// normal random talk, but chain talk during chain
+	if CHAIN.IDName == "" {
+		RandomTalk
+	}
+	else {
+		ChainTalk
+	}
+}
+
+// speedup measures (reprinted from ghost "Haro YAYA World")
+RandomTalk
+{
+	TOSTR(EVAL(CHR(0x22)+RandomTalkEx()+CHR(0x22)))
+}
+
+// Write random talk here (avoid duplication by " : nonoverlap")
+// Only here, always write with ' '.
+// Since %( ) is expanded in the contents of RandomTalk above, you do not need to use " ".
+RandomTalkEx : nonoverlap {
+
+	//"%(jdbase)RandomTalk1. \e"
+
+	//"%(jdbase) RandomTalk2. \e"
+
+	//"%(jdbase)Random talk 3. \e"
+	
+	"%(jdbase)"
+	if causeofdeath == "" && ((jdaction !=3)||((jdtemp < 75)||(jdhunger < 5))){
+		if jdaction != 6 && timeleftoutside == -1{
+			if jdsanity < 25{
+				"%(nrto)JD shivers with a nervous grin.%(nrtc)"
+				"%(nrto)JD stares at the wall blankly.%(nrtc)"
+				"%(nrto)JD stares at something in the corner.%(nrtc)"
+				"%(nrto)JD mumbles something about Lady Winter.%(nrtc)"
+				"%(nrto)JD mutters about Lady Death.%(nrtc)"
+				"Even so, come quickly, Lady Spring..."
+				"Craps'y... Trapped.\n\n[half]Well and \nIf day on day \nFollows, and weary year \nOn year... and ever days and years... \nWell?"
+				"Shelley. The moon made thy lips pale, beloved; The wind made thy bosom chill..."
+				"P Shelley. \n\n[half]The night did shed \nOn thy dear head\nIts frozen dew, and thou didst lie\nWhere the bitter breath of the naked sky\nMight visit thee at will..."
+			}elseif jdsanity <= 51{
+				"To go in the dark with a light is to know the light. \nTo know the dark, go dark. Go without sight, \nand find that the dark, too, blooms and sings, \nand is traveled by dark feet and dark wings. \n\n[half]By Wendell Berry..."
+				"The dark shadow of space leans over us... \nWe are mindful that the darkness of greed, exploitation, and hatred \nalso lengthens its shadow over our small planet Earth. \nAs our ancestors feared death and evil and all the dark powers of winter, \nwe fear that the darkness of war, discrimination, and selfishness\nmay doom us and our planet to an eternal winter. \n\n[half]By Edward Hays."
+				"Lady Winter part I, by Don Bouchard.\n\n[half]When surly Winter sighs, her icy breath \nMakes adults think of coming death, \nMakes children think of falling snow, \nIce skates and sleds and away they go..."
+				"Lady Winter part II. Don Bouchard.\n\n[half]Alone among her Sisters, Winter holds such power \nTo stop the World, to drift in Time, if only for her hour. \nShe puts the trees and fields to sleep, \nThen covers lakes and land 'neath sheets, \nAnd though she tucks them into bed, \nTheir sleeping form is of the dead."
+				"Lady Winter part III. Bouchard.\n\n[half]This Lady White whose frigid face \nTurns from the sun with chilly grace \nHas for herself a single duty: \nThe world to rest in icy beauty. \nIn the North, where'er she goes, \nShe dresses lands with icy snows. \nIn gowns of ermine stand the trees, \nWhite trains of down lie at their lees. \nShe sets the plain with crystal lakes, \nAnd sugars hills with frosted flakes. \nWhere ever she in beauty goes, \nThe icy Queen her magic sows."
+				"Lady Winter part IV. Bouchard.\n\n[half]Strange sister of four Seasons, \nHer face, at first, seems set in Death, \nBut we who walk out on her icy grounds, \nTraverse a frozen pond or wander rounds \nDeep into her forests fast asleep, know well, \nWe who stop to listen and to look can tell, \nLife's certitude awaits the end of chilly Winter's icy fling."
+				"Snow-flakes by Henry Wadsworth Longfellow. \n\n[half]Out of the bosom of the Air, \nOut of the cloud-folds of her garments shaken, \nOver the woodlands brown and bare, \nOver the harvest-fields forsaken, \nSilent, and soft, and slow \nDescends the snow. \n\n[half]Even as our cloudy fancies take \nSuddenly shape in some divine expression, \nEven as the troubled heart doth make \nIn the white countenance confession, \nThe troubled sky reveals \nThe grief it feels. \n\n[half]This is the poem of the air, \nSlowly in silent syllables recorded; \nThis is the secret of despair, \nLong in its cloudy bosom hoarded, \nNow whispered and revealed \nTo wood and field. \n"
+				"Adelaide Crapsey, The Lonely Death. \n\n[half]In the cold I will rise, I will bathe \nIn waters of ice; myself \nAlone in the dawn, and anoint\nForehead and feet and hands; \nI will shutter the windows from the light, \nI will place in their sockets the four \nTall candles and set them a-flame \nIn the grey of the dawn; and myself \nWill lay myself straight in my bed, \nAnd draw the sheet under my chin."
+				"Percy B Shelley. The Cold Earth Slept Below. First half. \n\n[half]The cold eath slept below; \nAbove the cold sky shone; \nAnd all around, \nWith a chilling sound, \nFrom caves of ice and fields of snow \nThe breath of night like death did flow \nBeneath the sinking moon. \n\n[half]The wintry hedge was black; \nThe green grass was not seen; \nThe birds did not rest \nOn the bare thorn's breast, \nWhose roots, beside the pathway track, \nHad bound their folds o'er many a crack \nWhich the frost had made between."
+				"Percy Shelley. The Cold Earth Slept Below. Part 2. \n\n[half]Thine eyes glow'd in the glare \nOf the moon's dying light; \nAs a fen-fire's beam \nOn a sluggish stream \nGleams dimly--so the moon shone there, \nAnd it yellow'd the strings of thy tangled hair, \nThat shook in the wind of night.\n\n[half]The moon made thy lips pale, beloved; \nThe wind made thy bosom chill... \nThe night did shed \nOn thy dear head\nIts frozen dew, and thou didst lie\nWhere the bitter breath of the naked sky\nMight visit thee at will..."
+			}
+		}
+
+		
+		
+		if roomtemp > 45 && jdhunger < 10 && jdaction != 11 && jdaction != 10{
+			"%(nrto)JD's stomach lets out a painful grumble. They look upset for a moment, but then steel themself back into a moment of calm.%(nrtc)"
+			"I'm so hungry... I don't want to starve to death..."
+		}
+	}
+	
+	if roomtemp < 32 && jdaction != 11 && jdaction != 10{
+		"%(nrto)The cold is tangible in the room, bitter and sickening, like food left too long in the freezer.%(nrtc)"
+		"%(nrto)It is so cold...%(nrtc)"
+		
+		if jdaction != 6 && timeleftoutside == -1 && jdsanity > 45{
+			"%(nrto)JD's breaths come out softly, in little puffs like smoke. They swirl through the air like dye in water, but dissipate into nothingness like hope.%(nrtc)"
+			"%(nrto)JD lets puff after puff of calm breath fill the air and condense, letting tiny clouds pass through the miniscule room for a peaceful moment.%(nrtc)"
+		}
+		
+	}
+		
+	if jdaction == 16{
+		"%(nrto)JD has been outside for a while now.%(nrtc)"
+		"%(nrto)Something feels inexplicably wrong.%(nrtc)"
+		"%(nrto)This isn't right. Something's wrong.%(nrtc)"
+		"%(nrto)JD doesn't seem to be coming home this time.%(nrtc)"
+		"%(nrto)The stillness of the room is unsettling.%(nrtc)"
+	}
+
+}
+
+//Example of Chain Talk
+sample
+{{CHAIN
+	"%(jdbase)chain talk continuation 1\e"
+	"%(jdbase)chain talk continuation 2\e"
+	{
+		"%(jdbase)chain talk sequence 3-A\e"
+		"%(jdbase)chain talk continuation 3-B (end)\e:chain=end"
+		"%(jdbase)chain talk continued 3-C\e"
+	}
+	"%(jdbase)chain talk continued 4\e"
+	{
+		"%(jdbase)Chain talk sequence 5-A\e" 
+		"%(jdbase)chain talk sequence 5-B\e" 
+		"%(jdbase)chain talk continuation 5-C (end)\e:chain=end"
+	}
+	"%(jdbase)chain talk continued 6 (end)\e"
+}}CHAIN
+
+
+
+//------------------------------------------------------------------------------
+// Reactions to events (like waking up from hunger, leaving the bunker, going to bed at the user's behest)
+//------------------------------------------------------------------------------
+
+//Receives number of bean cans found as an argument
+DialogueReturn{
+	if prevaction == 11{
+		"%(jdbase)Fresh water."
+	}elseif powerpercent > 95{
+		DialoguePowerWeird
+	}else{
+		_beansgot = _argv[0]
+		if _beansgot == 0{
+			"Dang it. %(jdbase)Nothin'. Couldn't find anything, but had to get back before I froze to death..."
+		}elseif _beansgot == 1{
+			"I'm back...%(jdbase)"
+			"%(jdbase)One can. "
+		}else{
+			"Bunker sweet bunker. %(jdbase)I found %_beansgot cans..."
+		}
+	}
+	
+	
+
+}
+
+DialoguePowerWeird{
+	"%(jdbase)Wow, that is a lot of power, weird."
+}
+
+
+DialogueHungerSleepPains{
+	"I'm so hungry I can't sleep..."
+}
+
+DialogueHungerWakeBeans{
+	"Food..."
+}
+
+DialogueThirstWakeWater{
+	"Water..."
+}
+
+DialogueLeave{
+	"Goodbye, hallucination."
+}
+
+DialogueWakeTemp{
+	"Brr... the generator must be off..."
+}
+
+DialogueNoFoodNoEnergy{
+	"I'm gonna starve... too tired..."
+}
+
+DialogueNoWaterNoEnergy{
+	"Thirsty... could I melt some snow? \w8\w8Is it sanitary..."
+}
+
+DialogueOnWheelTurn{
+	"What the..."
+}
+
+DialogueConvinceToSleep{
+	"Maybe it's time to go to bed..."
+}
+
+//------------------------------------------------------------------------------
+// Command Dialogues (when sanity is low, the user can command them to do things)
+//------------------------------------------------------------------------------
+
+CommandEAT{
+	if jdhunger < 80{
+		if jdinventory[0] > 0{
+			jdaction = 2
+			"Okay, I'll eat.%(jdbase)"
+		}else{
+			"Me and what food...?"
+		}
+		
+	}else{
+		"Not that I'm hungry..."
+	}
+	
+	if jdinventory[2] > 0 && jdthirst < 40{
+		jdaction = 2
+		"I am kind of thirsty...%(jdbase)"
+	}
+}
+
+CommandJOURNEY{
+	jdaction = 5
+	"Not that anything matters anymore. \w8\w8%(jdbase)But, whatever you say."
+}
+
+CommandWHEEL{
+	jdaction = 9
+	"%(jdbase)It never ends."
+}
+
+CommandSLEEP{
+	jdaction = 3
+	"Sure. %(jdbase)Breaks are fine."
+}
+
+//------------------------------------------------------------------------------
+//OnTranslate event (reprinted from ghost "Hello YAYA World") (may be abbreviated)
+//------------------------------------------------------------------------------
+//Simplest example. Change the ending (". ¨Nyu.") (Omitted.) //(Commented out.)
+//(commented out)
+/*
+OnTranslate
+{
+	_text = reference[0].
+	_text = REPLACE(_text, "." , "Nyu.")
+	_text
+}
+*/
+
+//And here is the one that allows script input to be used to run commands.
+OnTranslate
+{
+	_talk = reference[0]
+	 if reference1 == "" && reference2 == ""
+    { //send input box : no event (ref2) , no special flag (ref1)
+        EVAL('"' + REPLACE(_talk,'"','" + CHR(0x22) + "') + '"')
+		//"
+    }else{
+		_talk
+	}
+	
+}
+
+//------------------------------------------------------------------------------
+///OnTranslateInternal event (reprinted from ghost "Hello YAYA World") (may be omitted).
+//------------------------------------------------------------------------------
+///OnTranslate goes through YAYA -> main body -> YAYA, once through the main body, whereas
+//OnTranslateInternal is a translate inside YAYA.
+//Therefore, reference variables, etc. are passed to this function without modification.
+//The argument _argv[0] is the content of the talk just before passing it to the main body.
+//(commented out)
+/*
+OnTranslateInternal
+{
+	_text = _argv[0].
+	_text = REPLACE(_text, "." , "Nyu.")
+	_text
+}
+*/
+
+
+
+
+
+
+
+testRain{
+	
+	_i = FUNCTIONEX("saori/proxy_ex.dll","saori/rain.exe",0,0,0,0)
+
+}
+
+
+testGyan{
+	
+	_i = FUNCTIONEX("saori/proxy_ex.dll","saori/Gyan.exe","3","yellow")
+
+}
+
+
+testMSG{
+
+	_i = FUNCTIONEX("saori/proxy_ex.dll","saori/MSG.exe","title","script\ncontent","1","+32")
+}
+
+OnGetGhostPath{
+	path = REPLACE(reference0,"\","//")
+	//
+	//path
+}
+
+//Creates a histogram and saves it in a subfolder 'graphs' under the specified name.
+histogram{
+	_i = FUNCTIONEX("saori/proxy_ex.dll","saori/histomachine.exe","mediumslateblue","#D5BDFF","group1,group2","94,19","Histogram", "testin", 55)
+	"\b2\_b[graphs\testing.jpg]"
+}
+
+testHisto{
+	"\![get,property,OnGetGhostPath,currentghost.path]\![raise,OnHistogram]"
+}
+
+OnHistogram{
+	_finalpath = path + "graphs//testinggraph.png"
+	_finalpath = REPLACE(_finalpath,"//","/")
+	_i = FUNCTIONEX("saori/proxy_ex.dll","saori/histomachine.exe","blue","skyblue","group1,group2,group3,group4,group5","9,18,36,31,4.86","Histogram", _finalpath)
+	--
+	"%_i: %_finalpath"
+}
+
+
+testHistoErr{
+	_i = FUNCTIONEX("saori/proxy_ex.dll","saori/histomachine.exe","orange","skyblue")
+}

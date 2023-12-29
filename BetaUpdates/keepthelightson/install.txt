@@ -1,0 +1,9 @@
+charset,Shift_JIS
+type,ghost
+
+//Ghost name
+name,J.D.
+
+//Where it will be installed
+directory,keepthelightson
+

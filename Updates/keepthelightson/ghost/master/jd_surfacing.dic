@@ -1,0 +1,236 @@
+//---------------------------------------------------------
+// Choice Usage
+//---------------------------------------------------------
+// Controlling of visuals. 
+
+//determine the state number (0 = lights on, 1 = lights off, 2 = lights are flickering)
+statenumber{
+	_flickermult = _argv[0]
+	if powerout{
+		1
+	}else{
+		(!powerout * (_flickermult-1))*2
+	} 
+}
+
+
+jdbase{
+	//check for flicker
+	_flickermult = _argv[0]
+	//if a flicker command was not specified, determine chance
+	if _flickermult == 0 || _flickermult == "" {
+		_flickermult = flickercheck
+	}
+	
+	bunkerbase(_flickermult)
+	--
+	if jdtemp < 94 || roomtemp < 30{
+		case jdaction{
+			when 2 {
+				"\i[52%(statenumber(_flickermult))]%(wheel(_flickermult))"
+			}
+			when 3{
+				"\i[53%(statenumber(_flickermult))]%(wheel(_flickermult))"
+			}
+			when 5 , 4 {
+				"\i[55%(statenumber(_flickermult))]%(wheel(_flickermult))"
+			}
+			when 6{
+				if jdtemp < 32{
+					"\i[56%(statenumber(_flickermult))]%(wheel(_flickermult))"
+				}else{
+					"\i[46%(statenumber(_flickermult))]%(wheel(_flickermult))"
+				}
+			}
+			when 9{
+				"\i[19%(5+statenumber(_flickermult))]"
+				//does not call the wheel since the animated wheel will be called automatically. 
+			}
+			others{
+				//Out n about
+				"%(wheel(_flickermult))"
+			}
+		}
+	}else{
+		case jdaction{
+			when 2 {
+				"\i[42%(statenumber(_flickermult))]%(wheel(_flickermult))"
+			}
+			when 3{
+				"\i[43%(statenumber(_flickermult))]%(wheel(_flickermult))"
+			}
+			when 5 , 4 {
+				"\i[45%(statenumber(_flickermult))]%(wheel(_flickermult))"
+			}
+			when 6{
+				"\i[46%(statenumber(_flickermult))]%(wheel(_flickermult))"
+			}
+			when 9{
+				"\i[19%(statenumber(_flickermult))]"
+				//does not call the wheel since the animated wheel will be called automatically. 
+			}
+			others{
+				//Out n about
+				"%(wheel(_flickermult))"
+			}
+		}
+	}
+
+}
+
+
+Onjdactionoverride{
+	_act = reference0
+	//check for flicker
+	_flickermult = _argv[0]
+	//if a flicker command was not specified, determine chance
+	if _flickermult == 0 || _flickermult == "" {
+		_flickermult = flickercheck
+	}
+	
+	bunkerbase(_flickermult)
+	--
+	if jdtemp < 94 || roomtemp < 30{
+		case _act{
+			when 2 {
+				"\i[52%(statenumber(_flickermult))]%(wheel(_flickermult))"
+			}
+			when 3{
+				"\i[53%(statenumber(_flickermult))]%(wheel(_flickermult))"
+			}
+			when 5 , 4 {
+				"\i[55%(statenumber(_flickermult))]%(wheel(_flickermult))"
+			}
+			when 6{
+				if jdtemp < 32{
+					"\i[56%(statenumber(_flickermult))]%(wheel(_flickermult))"
+				}else{
+					"\i[46%(statenumber(_flickermult))]%(wheel(_flickermult))"
+				}
+			}
+			when 9{
+				"\i[19%(5+statenumber(_flickermult))]"
+				//does not call the wheel since the animated wheel will be called automatically. 
+			}
+			others{
+				//Out n about
+				"%(wheel(_flickermult))"
+			}
+		}
+	}else{
+		case _act{
+			when 2 {
+				"\i[42%(statenumber(_flickermult))]%(wheel(_flickermult))"
+			}
+			when 3{
+				"\i[43%(statenumber(_flickermult))]%(wheel(_flickermult))"
+			}
+			when 5 , 4 {
+				"\i[45%(statenumber(_flickermult))]%(wheel(_flickermult))"
+			}
+			when 6{
+				"\i[46%(statenumber(_flickermult))]%(wheel(_flickermult))"
+			}
+			when 9{
+				"\i[19%(statenumber(_flickermult))]"
+				//does not call the wheel since the animated wheel will be called automatically. 
+			}
+			others{
+				//Out n about
+				"%(wheel(_flickermult))"
+			}
+		}
+	}
+
+}
+
+bunkerbase{
+	_flickermult = _argv[0]
+	//TEMPERATURE LOGIC
+	if roomtemp > 48{
+		"\0\s[1000]"
+	}elseif roomtemp > 32{
+		"\0\s[1010]"
+	}elseif roomtemp > 0{
+		"\0\s[1030]"
+	}else{
+		"\0\s[1050]"
+	}
+	--
+	if jdsanity > 10{
+		"\i[10%(statenumber(_flickermult))]"
+	}else{
+		//horrifying flickers
+		"\i[107]"
+	}
+	
+	--
+	//POWER LOGIC
+	if powerpercent >= (100/POWERSTAGES) * (POWERSTAGES - 1){
+		"\i[186]"
+	}elseif powerpercent >= (100/POWERSTAGES) * (POWERSTAGES - 2){
+		"\i[185]"
+	}elseif powerpercent >= (100/POWERSTAGES) * (POWERSTAGES - 3){
+		"\i[184]"
+	}elseif powerpercent >= (100/POWERSTAGES) * (POWERSTAGES - 4){
+		"\i[183]"
+	}elseif powerpercent >= (100/POWERSTAGES) * (POWERSTAGES - 5){
+		"\i[182]"
+	}elseif powerpercent >= (100/POWERSTAGES) * (POWERSTAGES - 6){
+		"\i[181]"
+	}
+
+}
+
+wheel{
+	if roomtemp > 32{
+		"\i[33%(statenumber(_argv[0]))]"
+	}else{
+		"\i[34%(statenumber(_argv[0]))]"
+	}
+}
+
+turnwheel{
+	//first, remove the old wheel (two options, accounting for an edge case where temp tips this frame too)
+	"\![anim,clear,33%(statenumber(1))]\![anim,clear,34%(statenumber(1))]\![anim,clear,33%(statenumber(2))]\![anim,clear,34%(statenumber(2))]"
+	--
+	//Now call the anim.
+	if roomtemp > 32{
+		"\i[33%(5+statenumber(1))]"
+	}else{
+		"\i[34%(5+statenumber(1))]"
+	}
+}
+
+stopwheelturn{
+	"\![anim,clear,33%(5+statenumber(1))]\![anim,clear,34%(5+statenumber(1))]%(wheel(1))"
+}
+
+//call the base but ensure it begins with a flicker anim
+flicker{
+	
+	jdbase(2)
+}
+
+//based on power amount, determines a multiplier that would cause the temperature to flicker
+//returns the multiplier, either 1 (no flicker) or 2 (flicker)
+flickercheck{
+
+	if powerpercent > 55{
+		1
+	}elseif powerpercent > 30{
+		1
+		1
+		1
+		2
+	}elseif powerpercent > 10{
+		1
+		1
+		2
+	}else{
+		1
+		2
+		2
+	}
+
+}
