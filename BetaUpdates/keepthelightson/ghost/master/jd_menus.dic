@@ -22,7 +22,7 @@ MouseDoubleClick_0Generator{
 	--
 	"---------TEMPERATURE---------\nInside: %(TEMPFORM(roomtemp))\nOutside: %(TEMPFORM(outsidetemp))\n\n[half]"
 	--
-	"-------------CONFIG-------------\nDifficulty: "
+	/*"-------------CONFIG-------------\nDifficulty: "
 	--
 	case difficulty{
 		//medium
@@ -38,7 +38,7 @@ MouseDoubleClick_0Generator{
 			"Dream"
 		}
 	}
-
+*/
 	//"Power: \nBeans: %beans\nEnergy: %jdenergy%\nRoom Temp: %roomtemp\nHunger: %jdhunger%\nSanity: %jdsanity%"
 
 }
@@ -139,7 +139,7 @@ inventoryplural : array{
 	"chemical handwarmers"
 	"uses of thread"
 	"cloth scraps"
-	"day's worth of estrogen"
+	"days' worth of estrogen"
 }
 
 

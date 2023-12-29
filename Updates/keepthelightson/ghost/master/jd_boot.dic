@@ -9,6 +9,7 @@
 OnGhostLoad
 {
 	initerrorqueue //For error logging. Remove if the related functions in the end of utility.dic are removed.
+	betaupdates = 1
 }
 
 // Unload ghosts
@@ -47,7 +48,7 @@ OnFirstBoot : all
 	
 	"\1\s[-1]%(jdbase)%(nrto)The wind gusts from the open latch. \w6It whistles and groans, \w4in loops and in waves, \w4taking up as much of the room as it can and not letting life get a word in. \w8Snow coasts along it, \w4a terrifying sidekick, \w4speckling upon skin as tiny bullets.%(nrtc)"
 	"\x%(nrto)The piercing scent of cold permeates everything, \w4and with a groan and a creak, the latch closes. \w8\w8The lights flicker on.%(nrtc)"
-	"\x%(nrto)The figure descends the ladder, \![embed,Onjdactionoverride,9]\w4and drags a too-tired body over to a large wheel set in the ground.%(nrtc)"
+	"\x%(nrto)The figure descends the ladder, \![embed,Onjdactionoverride,9]\w4and drags their too-tired body over to a large wheel set in the ground.%(nrtc)"
 	"\x*Creaaak. \w6Creaaak. \w6Creeaaaaak.*"
 	"\x%(nrto)The person forces it to move against all odds. \w8The frozen body of the wheel protests, \w4as does every life in the face of the bitter cold.%(nrtc)"
 	"\x.\w8\w8\w8.\w8\w8\w8."

@@ -182,6 +182,10 @@ MouseReaction_0Wheel{
 			powergenerated += TOREAL(1) / (difficulty-.8)
 			powerpercent += TOREAL(1) / (difficulty-.8)
 			powerhandgenerated += TOREAL(1) / (difficulty-.8)
+		}else{
+			powergenerated += 100 - powerpercent
+			powerhandgenerated += 100 - powerpercent
+			powerpercent = 100
 		}
 	}
 	
@@ -199,6 +203,10 @@ OnMouseWheel_0Wheel{
 			powergenerated += TOREAL(.5) / (difficulty-.8)
 			powerpercent += TOREAL(.5) / (difficulty-.8)
 			powerhandgenerated += TOREAL(.5) / (difficulty-.8)
+		}else{
+			powergenerated += 100 - powerpercent
+			powerhandgenerated += 100 - powerpercent
+			powerpercent = 100
 		}
 	}
 	
