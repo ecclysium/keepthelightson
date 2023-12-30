@@ -11,12 +11,12 @@ file,ghost/master/graphs/testin.png542eaf3fa6f9d256e0368c87658a84d8size=4639d
 file,ghost/master/graphs/testing.jpg9352ee21097b2cb20be325563faea99bsize=6128date=2022-12-20T23:20:42
 file,ghost/master/graphs/thirdgraph.pngc5f00ad5fc7cecebf73b6ebb1a92529asize=11515date=2022-12-18T14:50:29
 file,ghost/master/jd_aitalk.dic3a07ed1f1646b72f3ed6fd6ed75c7032size=12528date=2022-12-20T23:34:04
-file,ghost/master/jd_boot.dic6fac4912f83d41aa5bd72181f360ebe3size=8441date=2023-12-28T23:10:41
+file,ghost/master/jd_boot.dic48be02c845d10a7110ca3881b20bd255size=8459date=2023-12-28T23:12:05
 file,ghost/master/jd_main.dicabb38f8d1dea4edfcc571840c7711291size=12920date=2023-12-28T23:08:05
 file,ghost/master/jd_menus.dicae30f1ae85c50f753716ccb7e8b3ca8esize=7944date=2023-12-28T23:10:41
 file,ghost/master/jd_surfacing.dic7a339c9d87e9a55f05f64069e0865f87size=5335date=2023-12-23T18:44:35
 file,ghost/master/jd_time.dicba14ef22bd2026ba1e923470f8f8eb4bsize=14270date=2023-12-27T15:27:33
-file,ghost/master/jd_update.dicfc00a414e01255531644e46f9aaea0bfsize=3546date=2022-11-21T13:15:35
+file,ghost/master/jd_update.dicee411396695aed99eda66f84a30ebc71size=3549date=2023-12-30T00:03:31
 file,ghost/master/jd_utility.dic055ba80d619b60d5d2bbd910f7980530size=11656date=2022-11-21T13:15:36
 file,ghost/master/yaya.dll56e3af56c88e696cea1f39d53b239cefsize=880640date=2022-11-21T00:24:33
 file,ghost/master/yaya.txtfcb1e6f2e056f3ecd4a10bb277ea0669size=2043date=2022-11-23T16:36:25

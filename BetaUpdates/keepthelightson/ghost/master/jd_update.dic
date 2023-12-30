@@ -71,7 +71,7 @@ OnUpdateFailure
 //Network update Start downloading
 OnUpdate.OnDownloadBegin
 {
-	"%(nrto)%(jdbase)'%(EscapeAllTags(reference[0]))' downloading...%(nrtc)" 
+	///"%(nrto)%(jdbase)'%(EscapeAllTags(reference[0]))' downloading...%(nrtc)" 
 }
 
 // MD5 value matching talk is omitted to shorten update time.
